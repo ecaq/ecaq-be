@@ -1,0 +1,20 @@
+{
+  "name": "ecaq",
+  "version": "1.0.0",
+  "description": "dsc",
+  "main": "index.js",
+  "scripts": {
+    "test": "tst"
+  },
+  "keywords": [
+    "kw"
+  ],
+  "author": "flx",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1"
+  }
+}

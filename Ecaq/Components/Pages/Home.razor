@@ -1,0 +1,82 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject IJSRuntime js
+
+<PageTitle>Home</PageTitle>
+
+<h1 class="text-2xl text-red-200">Hello, world!!!</h1>
+
+<!-- Slider main container -->
+<div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slides -->
+        @foreach (var item in docs)
+        {
+            <div class="swiper-slide">
+                <div class="xl:mx-auto xl:max-w-full">
+                    <img src="@item.src" class="aspect-[5/4] sm:aspect-[5/3] md:aspect-[5/2] w-full object-cover" alt="" />
+                </div>
+            </div>
+        }
+        @* <div class="swiper-slide">Slide 1</div>
+        <div class="swiper-slide">Slide 2</div>
+        <div class="swiper-slide">Slide 3</div> *@
+        ...
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+</div>
+
+
+
+Welcome to your new app.
+
+@code {
+    List<Documents> docs = new();
+    protected override Task OnInitializedAsync()
+    {
+        docs.Add(new Documents
+            {
+                name = "slide 1",
+                desctiprion = "ws forklift",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/forkliftbanner2.jpg"
+            });
+        docs.Add(new Documents
+            {
+                name = "slide 2",
+                desctiprion = "ws racking",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/MainBanner1.jpg"
+            });
+        docs.Add(new Documents
+            {
+                name = "slide 3",
+                desctiprion = "ws with person forklift",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/MainBanner3.jpg"
+            });
+        return base.OnInitializedAsync();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await js.InvokeVoidAsync("SwiperBlz");
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public class Documents
+    {
+        public string name { get; set; }
+        public string desctiprion { get; set; }
+        public string src { get; set; }
+    }
+}

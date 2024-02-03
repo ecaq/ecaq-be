@@ -1,0 +1,22 @@
+﻿/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* hide the tnimce popup not-registered */
+.tox-notifications-container {
+    display: none !important
+}
+/* hide the tnimce popup not-registered */
+
+.swiper {
+    width: 600px;
+    height: 300px;
+}

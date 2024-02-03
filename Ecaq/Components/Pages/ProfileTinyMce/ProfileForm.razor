@@ -1,0 +1,321 @@
+﻿@page "/profile-form"
+@page "/profile-form/{ProfileId:int}"
+@rendermode InteractiveServer
+
+@inject IJSRuntime _js
+@inject NavigationManager _navManager
+@inject AppDbContext _db
+
+<PageTitle>Counter</PageTitle>
+
+
+<div class="max-w-7xl mx-auto">
+    <div class="">
+
+
+        @if(profile is not null)
+        {
+
+
+
+        <EditForm EditContext="EditContext" OnSubmit="OnSubmitForm">
+            <DataAnnotationsValidator />
+
+            <div class="shadow sm:rounded-md">
+
+                <MyTabPage TabItems="@TabItems" TabItemSelectedCallback="TabItemCallback">
+                @switch (TabItemSelected!.Id)
+                {
+                    case 1:
+
+
+
+
+                            <div class="bg-green-50 sm:p-6">
+                                    <div>
+                                        @*<h2 id="payment-details-heading" class="text-xl leading-6 font-medium text-gray-900">Profile</h2>*@
+                                        @*<p class="mt-1 text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>*@
+                                    </div>
+
+                                    <div>
+
+                                        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+
+                                            <div class="sm:col-span-2">
+                                                <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                                                <div class="mt-1">
+                                                    <InputText type="text" @bind-Value="profile!.Name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                @*<label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                                        <div class="mt-1">
+                                        <InputText type="text" @bind-Value="SampleProfile!.Name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                        </div>*@
+                                            </div>
+
+                                            <div class="sm:col-span-2">
+                                                @*<label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                                        <div class="mt-1">
+                                        <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option>United States</option>
+                                        <option>Canada</option>
+                                        <option>Mexico</option>
+                                        </select>
+                                        </div>*@
+                                            </div>
+
+
+                                            <div class="sm:col-span-6">
+                                                <label for="about" class="block text-sm font-medium text-gray-700">About</label>
+                                                <div class="mt-1">
+                                                    <Editor ApiKey="no-api-key"
+                                                    Field="() => profile.Desc" @bind-Value="profile.Desc"
+                                                    JsConfSrc="TinyBlzRoxy"
+                                                    ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
+                                                    <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="sm:col-span-4">
+                                                <label for="first-name" class="block text-sm font-medium text-gray-700">Gallery Path</label>
+                                                <div class="mt-1">
+                                                    <InputText type="text" @bind-Value="profile!.PathUrl" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                                </div>
+                                            </div>
+
+                                            <div class="sm:col-span-3">
+                                                <label for="photo" class="block text-sm font-medium text-gray-700">Thumbnail</label>
+                                                <div class="mt-1 flex items-center">
+                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@profile!.ThumbUrl" id="customImage" style="max-width:240px;cursor:pointer" />
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-3">
+                                                <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+                                                <div class="mt-1 flex items-center">
+                                                    <img @onclick="@(() => ShowRoxyModal("ImageUrlToInput1", "customImage1"))" src="@profile!.ImageUrl" id="customImage1" style="max-width:240px;;cursor:pointer" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="flex justify-end mt-4">
+                                        <span class="mr-3" id="annual-billing-label">
+                                            <span class="text-sm font-medium text-gray-900">Is Active </span>
+                                        </span>
+                                        <span @onclick="@OnIsActiveClicked" class="@(profile.IsActive ? "bg-appPriBlue" : "bg-appTextGrayLight") relative inline-block flex-shrink-0 h-5 w-10 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
+                                            <span class="@(profile.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-4 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+                                        </span>
+                                    </div>
+
+                                </div>
+
+
+                        break;
+                    case 2:
+                            <div class="bg-indigo-50 sm:p-6">
+                                <div>
+                                    @*<h2 id="payment-details-heading" class="text-xl leading-6 font-medium text-gray-900">Company</h2>*@
+                                </div>
+                            </div>
+                        break;
+                    case 3:
+                            <div class="bg-red-50 sm:p-6">
+                                <div>
+                                    @*<h2 id="payment-details-heading" class="text-xl leading-6 font-medium text-gray-900">Promotions</h2>*@
+                                </div>
+                            </div>
+                        break;
+                    case 4:
+                            <div class="bg-orange-50 sm:p-6">
+                                <div>
+                                    @*<h2 id="payment-details-heading" class="text-xl leading-6 font-medium text-gray-900">Supports</h2>*@
+                                </div>
+                            </div>
+                        break;
+                }
+            </MyTabPage>
+
+
+
+
+                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 space-x-2">
+                    <button type="button" @onclick="GoBack" class="bg-appBlack border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white">Cancel</button>
+                    <button type="submit" disabled="@(!context.Validate())" class="@(!EditContext!.Validate() ? "bg-appGrayLight":"bg-appPriBlue hover:bg-appSecBlue") border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white">Save</button>
+                </div>
+            </div>
+
+        </EditForm>
+
+
+        }
+
+
+    </div>
+</div>
+
+<div class="@(showRoxy ? "" : "hidden")">
+    <RoxyModal ElemInput="@ElemInputId" ElemImg="@ElemImgId" OnClose="UpdateImageModelBinding" />
+</div>
+
+@code
+{
+    [Parameter]
+    public int ProfileId { get; set; }
+
+    SampleProfile? profile = new();
+    public EditContext? EditContext;
+    CrudOperation crudOperation = CrudOperation.Add;
+
+    List<TabItem>? TabItems;
+    TabItem? TabItemSelected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TabItems = TabItem.TabItems();
+        //TabItems = TabItems!.ToList();
+        TabItemSelected = TabItems.FirstOrDefault()!;
+
+        if(ProfileId > 0)
+        {
+            // Warning: do not use FindAsync here.
+            profile = _db.SampleProfiles.Find(ProfileId);
+            crudOperation = CrudOperation.Edit;
+        }
+        else
+        {
+            profile!.Name = "Ank";
+            profile!.Desc = "Yjn";
+            profile.ThumbUrl = "myassets/resources/no-image.jpg";
+            profile.ImageUrl = "myassets/resources/no-image.jpg";
+        }
+
+        EditContext = new(profile!);
+
+        //EditContext.NotifyValidationStateChanged();
+        //EditContext.OnFieldChanged += EditContext_OnFieldChanged!;
+
+        await base.OnInitializedAsync();
+    }
+
+    private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        //Console.WriteLine($"EditContext_OnFieldChanged - {e.FieldIdentifier.FieldName}");
+
+        //FieldIdentifier fieldIdentifier = EditContext!.Field(e.FieldIdentifier.FieldName);
+
+        //EditContext!.Validate();
+        //StateHasChanged();
+    }
+
+    void TabItemCallback(TabItem selectedTabItem)
+    {
+        TabItemSelected = selectedTabItem;
+    }
+
+
+    private void OnIsActiveClicked()
+    {
+        profile!.IsActive = !profile.IsActive;
+    }
+
+    async void OnSubmitForm()
+    {
+        if (!EditContext!.GetValidationMessages().Any())
+        {
+            await SaveAsync(profile!);
+            GoBack();
+        }
+    }
+    async Task SaveAsync(SampleProfile profile)
+    {
+
+        switch (crudOperation)
+        {
+            case CrudOperation.Add:
+                await _db.SampleProfiles.AddAsync(profile);
+                break;
+            case CrudOperation.Edit:
+                //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
+                //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
+                _db.Entry(profile).State = EntityState.Modified;
+
+                _db.SampleProfiles.Update(profile);
+                break;
+            case CrudOperation.Delete:
+                _db.SampleProfiles.Remove(profile);
+                break;
+            default:
+                break;
+        }
+        await _db.SaveChangesAsync();
+        //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
+        //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
+        _db.Entry<SampleProfile>(profile).State = EntityState.Detached;
+    }
+
+
+
+
+
+
+
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        //await jsRuntime.InvokeVoidAsync("renderHeroSlider");
+        if (firstRender)
+        {
+            //await js.CKEditorFileman1();
+            //await js.CKEditorFileman2();
+        }
+
+    }
+
+
+
+
+
+
+    private bool showRoxy = false;
+    private string ElemInputId = "";
+    private string ElemImgId = "";
+    async void UpdateImageModelBinding()
+    {
+        showRoxy = false;
+        string returnImage = await _js.InvokeAsync<string>("RoxyReturnImage", ElemImgId);
+        switch (ElemImgId)
+        {
+            case "customImage":
+                profile!.ThumbUrl = returnImage;
+                break;
+            case "customImage1":
+                profile!.ImageUrl = returnImage;
+                break;
+        }
+
+        int lastSlash = returnImage.LastIndexOf('/');
+        profile!.PathUrl = (lastSlash > -1) ? returnImage.Substring(0, lastSlash) : returnImage;
+
+        StateHasChanged();
+    }
+    private void ShowRoxyModal(string elemInputId, string elemImgId)
+    {
+        ElemInputId = elemInputId;
+        ElemImgId = elemImgId;
+        showRoxy = true;
+    }
+
+    void GoBack() => _navManager.NavigateTo("/profile");
+
+}
+
+
+
+

@@ -1,0 +1,49 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Dotnet Ftp Deployment to 1NT3R
+
+on:
+  workflow_dispatch:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Publish
+      run: dotnet publish -c Release --output ./Release
+    #substitute production appsettings entries to appsettings json file (case sensitive)
+    - name: App Settings Variable Substitution
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: './Release/appsettings.json'
+      env:
+        ConnectionStrings.DefaultConnection: ${{ secrets.MY_CONNECTION_STRING }}
+        Account.Usr: ${{ secrets.ACCOUT_USR }}
+        Account.Pwd: ${{ secrets.ACCOUNT_PWD }}
+        Jwt.Issuer: ${{ secrets.JWT_ISSUER_AUDIENCE }}
+        Jwt.Audience: ${{ secrets.JWT_ISSUER_AUDIENCE }}
+        Jwt.Key: ${{ secrets.JWT_KEY }}
+        Smtp.host: ${{ secrets.SMTP_HOST }}
+        Smtp.usr: ${{ secrets.SMTP_USR }}
+        Smtp.pwd: ${{ secrets.SMTP_PWD }}
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_WEBMADEIT_HST }}
+        username: ${{ secrets.FTP_WEBMADEIT_USR }}
+        password: ${{ secrets.FTP_WEBMADEIT_PWD }}
+        local-dir: ./Release/
+        server-dir: ./ecaq-be/
