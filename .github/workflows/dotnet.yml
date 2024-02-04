@@ -37,7 +37,7 @@ jobs:
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ secrets.FTP_WEBMADEIT_HST }}
+        server: ${{ secrets.FTP_INTER_HOST }}
         username: ${{ secrets.FTP_WEBMADEIT_USR }}
         password: ${{ secrets.FTP_WEBMADEIT_PWD }}
         local-dir: ./Release/
