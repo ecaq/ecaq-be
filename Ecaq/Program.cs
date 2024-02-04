@@ -28,7 +28,9 @@ builder.Services.AddAuthentication(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), 
+    ServiceLifetime.Transient); //// this will reset your model to its original value if you decided to cancel the operations (ie. browse and replace photo from fileman then cancel the form).
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -59,6 +61,22 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddServerSideBlazor().AddCircuitOptions(x => x.DetailedErrors = true);
 }
 
+builder.Services.AddAuthorization();
+//builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyAllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins(builder.Configuration["Cors:Origin1"]!, builder.Configuration["Cors:Origin2"]!,
+                              builder.Configuration["Cors:Origin3"]!, builder.Configuration["Cors:Origin4"]!,
+                              builder.Configuration["Cors:Origin5"]!, builder.Configuration["Cors:Origin6"]!,
+                              builder.Configuration["Cors:Origin7"]!, builder.Configuration["Cors:Origin8"]!,
+                              builder.Configuration["Cors:Origin9"]!, builder.Configuration["Cors:Origin10"]!)
+                              .AllowAnyHeader().AllowAnyMethod();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -83,6 +101,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession(); // also use for RoxyFileman to be able to create folder
 app.UseAntiforgery();
+
+app.UseCors("MyAllowSpecificOrigins");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

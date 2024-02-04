@@ -363,7 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # appsettings
-appsettings.json
+#appsettings.json
 appsettings.Development.json
 
 #node

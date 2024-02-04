@@ -31,11 +31,6 @@ jobs:
         files: './Release/appsettings.json'
       env:
         ConnectionStrings.DefaultConnection: ${{ secrets.MY_CONNECTION_STRING }}
-        Account.Usr: ${{ secrets.ACCOUT_USR }}
-        Account.Pwd: ${{ secrets.ACCOUNT_PWD }}
-        Jwt.Issuer: ${{ secrets.JWT_ISSUER_AUDIENCE }}
-        Jwt.Audience: ${{ secrets.JWT_ISSUER_AUDIENCE }}
-        Jwt.Key: ${{ secrets.JWT_KEY }}
         Smtp.host: ${{ secrets.SMTP_HOST }}
         Smtp.usr: ${{ secrets.SMTP_USR }}
         Smtp.pwd: ${{ secrets.SMTP_PWD }}
