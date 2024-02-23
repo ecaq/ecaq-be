@@ -1,7 +1,9 @@
 ﻿
+using Ecaq.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -18,6 +20,32 @@ namespace Ecaq.Helpers
             return BitConverter.ToString(bytes).Replace("-", "").ToLower();
         }
 
+        public static string CreateRandomPassword(int passwordLength)
+        {
+            string allowedChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789!@$?_-";
+            char[] chars = new char[passwordLength];
+            Random rd = new();
+
+            for (int i = 0; i < passwordLength; i++)
+            {
+                chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+            }
+
+            return new string(chars);
+        }
+        public static string CreateRandomNumbers(int numberLength)
+        {
+            string allowedChars = "01234567899876543210";
+            char[] chars = new char[numberLength];
+            Random rd = new();
+
+            for (int i = 0; i < numberLength; i++)
+            {
+                chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
+            }
+
+            return new string(chars);
+        }
         public static bool IsValidEmail(string strIn)
         {
             // Return true if strIn is in valid e-mail format.
@@ -85,6 +113,134 @@ namespace Ecaq.Helpers
         {
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+
+
+
+
+
+        // <summary>
+        // Adds a new object to a JSON file.
+        //
+        // Parameters:
+        // - filePath: The path to the JSON file.
+        // - newObject: The object to be added to the JSON file.
+        //
+        // Exceptions:
+        // - Throws an ArgumentException if the filePath is null or empty.
+        // - Throws an ArgumentNullException if the newObject is null.
+        // - Throws a JsonException if there is an error while serializing the newObject to JSON.
+        // - Throws an IOException if there is an error while writing to the JSON file.
+        // </summary>
+        public static async void AddObjectToJsonFile(string filePath, Cities newObject, JsonSerializerOptions jsonOptions)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty.");
+            }
+
+            if (newObject == null)
+            {
+                throw new ArgumentNullException(nameof(newObject), "Object cannot be null.");
+            }
+
+            try
+            {
+                // Read existing JSON file content
+                string jsonContent = await File.ReadAllTextAsync(filePath);
+
+                // Deserialize the JSON content into a dynamic object
+                var jsonObject = JsonSerializer.Deserialize<CityRoot>(jsonContent)!;
+
+                // Add the new object to the JSON array
+                //jsonObject.Add(newObject);
+                jsonObject.cities.Add(newObject);
+
+                // Serialize the updated object back to JSON
+                string updatedJsonContent = JsonSerializer.Serialize(jsonObject, jsonOptions);
+
+                // Write the updated JSON content back to the file
+                File.WriteAllText(filePath, updatedJsonContent);
+
+            }
+            catch (JsonException ex)
+            {
+                throw new JsonException("Error while serializing the object to JSON.", ex);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error while writing to the JSON file.", ex);
+            }
+        }
+
+        public static async Task<CityRoot> GetJsonFileToObjecAsync(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty.");
+            }
+
+            try
+            {
+                // Read existing JSON file content
+                string jsonContent = await File.ReadAllTextAsync(filePath);
+
+                // Deserialize the JSON content into a dynamic object
+                var jsonObject = JsonSerializer.Deserialize<CityRoot>(jsonContent)!;
+
+                return jsonObject;
+            }
+            catch (JsonException ex)
+            {
+                throw new JsonException("Error while serializing the object to JSON.", ex);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error while writing to the JSON file.", ex);
+            }
+        }
+
+        public static async void DeletedToJsonFile(string filePath, int id, JsonSerializerOptions jsonOptions)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("File path cannot be null or empty.");
+            }
+
+            try
+            {
+                // Read existing JSON file content
+                string jsonContent = await File.ReadAllTextAsync(filePath);
+
+
+
+
+
+
+
+                // Deserialize the JSON content into a dynamic object
+                var jsonObject = JsonSerializer.Deserialize<CityRoot>(jsonContent)!;
+                var cityObject = jsonObject.cities.Where(x => x.id == id).FirstOrDefault();
+
+                // Add the new object to the JSON array
+                //jsonObject.Add(newObject);
+                jsonObject.cities.Remove(cityObject!);
+
+                // Serialize the updated object back to JSON
+                string updatedJsonContent = JsonSerializer.Serialize(jsonObject, jsonOptions);
+
+                // Write the updated JSON content back to the file
+                File.WriteAllText(filePath, updatedJsonContent);
+            }
+            catch (JsonException ex)
+            {
+                throw new JsonException("Error while serializing the object to JSON.", ex);
+            }
+            catch (IOException ex)
+            {
+                throw new IOException("Error while writing to the JSON file.", ex);
+            }
         }
 
 

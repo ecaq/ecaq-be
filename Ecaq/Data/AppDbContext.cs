@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     }
 
 
+    public DbSet<MemberModel> MemberModels => Set<MemberModel>();
     public DbSet<BookModel> BookModels => Set<BookModel>();
     public DbSet<SampleProfile> SampleProfiles => Set<SampleProfile>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)

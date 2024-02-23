@@ -15,8 +15,8 @@ public class Seed
                     new ApplicationUser
                     { 
                         Name = "Felix", 
-                        UserName = "mydevact@outlook.com", 
-                        Email = "mydevact@outlook.com"
+                        UserName = "fam.ecaq@gmail.com", 
+                        Email = "fam.ecaq@gmail.com"
                     }
                 };
 

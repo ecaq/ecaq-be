@@ -1,0 +1,88 @@
+{
+  "cities": [
+    {
+      "cityName": "Lisbon",
+      "country": "Portugal",
+      "emoji": "\uD83C\uDDF5\uD83C\uDDF9",
+      "date": "2027-10-31T15:59:59.138Z",
+      "notes": "My favorite city so far!",
+      "position": {
+        "lat": 38.727881642324164,
+        "lng": -9.140900099907554
+      },
+      "id": 73930385
+    },
+    {
+      "cityName": "Madrid",
+      "country": "Spain",
+      "emoji": "\uD83C\uDDEA\uD83C\uDDF8",
+      "date": "2027-07-15T08:22:53.976Z",
+      "notes": "",
+      "position": {
+        "lat": 40.46635901755316,
+        "lng": -3.7133789062500004
+      },
+      "id": 17806751
+    },
+    {
+      "cityName": "Berlin",
+      "country": "Germany",
+      "emoji": "\uD83C\uDDE9\uD83C\uDDEA",
+      "date": "2027-02-12T09:24:11.863Z",
+      "notes": "Amazing \uD83D\uDE03",
+      "position": {
+        "lat": 52.53586782505711,
+        "lng": 13.376933665713324
+      },
+      "id": 98443197
+    },
+    {
+      "cityName": "Dubai",
+      "country": "UAE",
+      "emoji": "QR",
+      "date": "2023-11-02T10:14:41.757Z",
+      "notes": "dubae, this is a test",
+      "position": {
+        "lat": 23.640316520134103,
+        "lng": 54.22479403958004
+      },
+      "id": 39079288
+    },
+    {
+      "cityName": "Montana",
+      "country": "USA",
+      "emoji": "QR",
+      "date": "2023-11-03T22:10:26.393Z",
+      "notes": "monusa, this is a test",
+      "position": {
+        "lat": 46.85966098338101,
+        "lng": -110.29845196854085
+      },
+      "id": 66086904
+    },
+    {
+      "cityName": "Ber",
+      "country": "Ger",
+      "emoji": "\uD83C\uDDE9\uD83C\uDDEA",
+      "date": "2027-02-12T09:24:11.863Z",
+      "notes": "Amazing \uD83D\uDE03",
+      "position": {
+        "lat": 52.53586782505711,
+        "lng": 13.376933665713324
+      },
+      "id": 98443100
+    },
+    {
+      "cityName": "Doha",
+      "country": "Qatar",
+      "emoji": "\uD83C\uDDEA\uD83C\uDDF8",
+      "date": "2023-11-07T00:00:00",
+      "notes": "dq",
+      "position": {
+        "lat": 25.379812727165834,
+        "lng": 51.49828429218751
+      },
+      "id": 13778023
+    }
+  ]
+}

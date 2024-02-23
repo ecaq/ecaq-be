@@ -6,6 +6,8 @@ using Ecaq.Controllers;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Ecaq.Services.Repositories;
+using Ecaq.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddApiEndpoints();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddControllers();
 
@@ -69,10 +72,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins(builder.Configuration["Cors:Origin1"]!, builder.Configuration["Cors:Origin2"]!,
-                              builder.Configuration["Cors:Origin3"]!, builder.Configuration["Cors:Origin4"]!,
-                              builder.Configuration["Cors:Origin5"]!, builder.Configuration["Cors:Origin6"]!,
-                              builder.Configuration["Cors:Origin7"]!, builder.Configuration["Cors:Origin8"]!,
-                              builder.Configuration["Cors:Origin9"]!, builder.Configuration["Cors:Origin10"]!)
+                              builder.Configuration["Cors:Origin3"]!)
                               .AllowAnyHeader().AllowAnyMethod();
                       });
 });
@@ -114,6 +114,7 @@ app.MapAdditionalIdentityEndpoints();
 
 app.MapControllers();
 
+app.MapMemberModelEndpoints();
 app.MapBookModelEndpoints();
 
 using var scope = app.Services.CreateScope();
