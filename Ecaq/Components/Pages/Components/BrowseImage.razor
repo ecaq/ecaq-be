@@ -1,0 +1,22 @@
+﻿<img class="@(IsCursorPointerOn ? "cursor-pointer":"") @CssOptions" src="@Src" alt="@Alt" />
+@code { 
+    [Parameter]
+    public bool IsCursorPointerOn { get; set; }
+    [Parameter]
+    public string? CssOptions { get; set; }
+    [Parameter]
+    public string? Alt { get; set; }
+    [Parameter]
+    public string? Src { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(Src))
+        {
+            Src = "myassets/resources/image-not-found.png";
+        }
+        await base.OnInitializedAsync();
+    }
+
+
+}

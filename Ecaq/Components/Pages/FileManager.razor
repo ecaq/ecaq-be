@@ -1,0 +1,42 @@
+﻿@page "/fileman"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+
+Welcome to your new app.
+<div class="">
+    <RoxyFileman ElemInput="" ElemImg="" />
+</div>
+@code {
+    List<Documents> docs = new();
+    protected override Task OnInitializedAsync()
+    {
+        docs.Add(new Documents
+            {
+                name = "slide 1",
+                desctiprion = "ws forklift",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/forkliftbanner2.jpg"
+            });
+        docs.Add(new Documents
+            {
+                name = "slide 2",
+                desctiprion = "ws racking",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/MainBanner1.jpg"
+            });
+        docs.Add(new Documents
+            {
+                name = "slide 3",
+                desctiprion = "ws with person forklift",
+                src = "https://warehousingsolutions.aamotors.com/myassets/uploads/Home/slider/MainBanner3.jpg"
+            });
+        return base.OnInitializedAsync();
+    }
+
+    public class Documents
+    {
+        public string name { get; set; }
+        public string desctiprion { get; set; }
+        public string src { get; set; }
+    }
+}

@@ -1,0 +1,45 @@
+﻿
+<div class="@(SpinMe ? "":"hidden")">
+    <div class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center" style="background: rgba(0, 0, 0, 0.3);">
+        <div class="bg-appBgDark dark:bg-appBgLight border py-4 px-5 rounded-lg flex items-center flex-col">
+            <div class="loader-dots block relative w-20 h-5 mt-2">
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div class="text-appTextLight dark:text-appTextDark text-sm font-medium my-2 text-center">
+                Connecting to server, please wait...
+            </div>
+            @if (IsCanCancel){
+                <div class="mt-3 sm:mt-5 text-center">
+                    <button @onclick="OnCancel" type="button" class="py-1.5 px-5 rounded-full shadow-sm text-sm font-medium text-appTextLight dark:text-appTextLight bg-appTena dark:bg-appTena hover:opacity-75 focus:outline-none">
+                        Cancel
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool SpinMe { get; set; }
+    [Parameter]
+    public bool IsCanCancel { get; set; }
+    [Parameter]
+    public EventCallback CancelTokenCallback { get; set; }
+
+    void OnCancel() 
+    {
+        CancelTokenCallback.InvokeAsync();
+    }
+
+    //bool spin = false;
+    //protected override Task OnParametersSetAsync()
+    //{
+    //    spin = SpinMe;
+    //    return base.OnParametersSetAsync();
+    //}
+
+}

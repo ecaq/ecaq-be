@@ -13,7 +13,14 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     }
 
 
+    public DbSet<HomeBanner> HomeBanners => Set<HomeBanner>();
+    public DbSet<EcaqCoreModel> EcaqCoreModels => Set<EcaqCoreModel>();
+    public DbSet<GalleryModel> GalleryModels => Set<GalleryModel>();
     public DbSet<MemberModel> MemberModels => Set<MemberModel>();
+
+    /// <summary>
+    /// Sample
+    /// </summary>
     public DbSet<BookModel> BookModels => Set<BookModel>();
     public DbSet<SampleProfile> SampleProfiles => Set<SampleProfile>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)

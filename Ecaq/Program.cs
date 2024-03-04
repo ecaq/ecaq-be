@@ -72,7 +72,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins(builder.Configuration["Cors:Origin1"]!, builder.Configuration["Cors:Origin2"]!,
-                              builder.Configuration["Cors:Origin3"]!)
+                              builder.Configuration["Cors:Origin3"]!, builder.Configuration["Cors:Origin4"]!, builder.Configuration["Cors:Origin4"]!)
                               .AllowAnyHeader().AllowAnyMethod();
                       });
 });

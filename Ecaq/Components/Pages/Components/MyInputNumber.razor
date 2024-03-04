@@ -1,0 +1,112 @@
+﻿@* Inherits from the original InputText component *@
+@inherits InputText
+@*
+<div class="">
+    <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+        <label for="@inputId" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">@Label</label>
+        <input @attributes="InputAttributes"
+               class="block w-full border-0 py-2.5 pl-7 text-appBlack bg-beeBackground focus:ring-0 text-sm outline-none tracking-normal"
+               id="@inputId"
+               type="@inputType"
+               @bind="CurrentValueAsString"
+               @bind:event="oninput"
+               @onkeyup="KeyboardEventHandler" />
+    </div>
+    @ErrorValidationRF
+</div>*@
+<div>
+    <div class="relative border border border-1 border-gray-400 rounded-md px-3 py-2.5 shadow-sm">
+        <label for="@inputId" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 text-appGray dark:text-appBitWhite text-xs font-medium">@Label</label>
+        <input @attributes="InputAttributes"
+               class="block w-full border-0 p-0 text-appDarkBlue dark:text-appNeuPri focus:ring-0 sm:text-md"
+               id="@inputId"
+               type="@inputType"
+               @bind="CurrentValueAsString"
+               @bind:event="oninput"
+               @onkeyup="KeyboardEventHandler" />
+    </div>
+    @ErrorValidationRF
+</div>
+
+
+@code {
+    [Parameter]
+    public Dictionary<string, object>? InputAttributes { get; set; }
+    [Parameter]
+    public string? Label { get; set; }
+    [Parameter]
+    public string? inputId { get; set; }
+    [Parameter]
+    public string? inputType { get; set; }
+    [Parameter]
+    public RenderFragment? ErrorValidationRF { get; set; }
+    [Parameter]
+    public RenderFragment? IconLeft { get; set; }
+    [Parameter]
+    public RenderFragment? IconRight { get; set; }
+    [Parameter]
+    public string? MaxLength { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        //var inputAttr = new Dictionary<string, object>() { { "maxlength", MaxLength! } };
+        return base.OnInitializedAsync();
+    }
+
+    void KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        //string keyCode = args.Key;
+
+        try
+        {
+            if (CurrentValueAsString!.Length > int.Parse(MaxLength!))
+            {
+                string currStr = CurrentValueAsString.Substring(0, int.Parse(MaxLength!));
+                CurrentValueAsString = currStr;
+                return;
+            }
+
+            //Console.WriteLine("string: " + keyCode);
+            //switch (keyCode)
+            //{
+            //    case "0":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "1":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "2":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "3":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "4":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "5":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "6":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "7":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "8":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    case "9":
+            //        //CurrentValueAsString = keyCode;
+            //        break;
+            //    default:
+            //        Console.WriteLine("cur value: " + CurrentValueAsString);
+            //        string currStr = CurrentValueAsString!.Substring(0, CurrentValueAsString.Length - 1);
+            //        CurrentValueAsString = currStr;
+            //        break;
+            //}
+        }
+        catch { }
+    }
+
+}

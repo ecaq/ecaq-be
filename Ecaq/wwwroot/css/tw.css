@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    /* This won't be included in your compiled CSS unless you actually use it */
+    .my-active {
+        background-color: #808080;
+        color: white;
+    }
+} 
+
+.active {
+        @apply bg-gray-800 text-white;
+}

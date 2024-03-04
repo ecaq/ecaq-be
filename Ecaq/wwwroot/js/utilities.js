@@ -120,9 +120,10 @@ function SwiperBlz() {
 			crossFade: true
 		},
 		loop: true,
-		autoplay: {
-			delay: 4000
-		},
+
+		//autoplay: {
+		//	delay: 4000
+		//},
 
 		// If we need pagination
 		pagination: {
