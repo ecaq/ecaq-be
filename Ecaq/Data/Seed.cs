@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
 
 namespace Ecaq.Data;
 
@@ -13,9 +12,9 @@ public class Seed
             var users = new List<ApplicationUser>
                 {
                     new ApplicationUser
-                    { 
-                        Name = "Felix", 
-                        UserName = "fam.ecaq@gmail.com", 
+                    {
+                        Name = "Felix",
+                        UserName = "fam.ecaq@gmail.com",
                         Email = "fam.ecaq@gmail.com"
                     }
                 };

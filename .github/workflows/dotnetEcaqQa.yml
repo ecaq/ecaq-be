@@ -41,4 +41,4 @@ jobs:
         username: ${{ secrets.FTP_ECAQ_USR }}
         password: ${{ secrets.FTP_ECAQ_PWD }}
         local-dir: ./Release/
-        server-dir: ./qa/
+        server-dir: ./be-test/

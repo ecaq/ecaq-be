@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Ecaq.Data;
+﻿using Ecaq.Data;
 using Ecaq.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
 namespace Ecaq.Controllers;
 
 public static class MemberModelEndpoints
 {
-    public static void MapMemberModelEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapMemberModelEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/MemberModel").WithTags(nameof(MemberModel));
 

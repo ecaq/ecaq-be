@@ -12,10 +12,9 @@
         public static List<TabItem> TabItems()
         {
             List<TabItem> TabItems = new();
-            TabItems.Add(new TabItem { Id = 1, Name = "Profile", Href = "", ClassColor = "bg-green-50", IsCurrent = false });
-            TabItems.Add(new TabItem { Id = 2, Name = "Company", Href = "", ClassColor = "bg-indigo-50", IsCurrent = false });
-            TabItems.Add(new TabItem { Id = 3, Name = "Promotions", Href = "", ClassColor = "bg-red-50", IsCurrent = false });
-            TabItems.Add(new TabItem { Id = 4, Name = "Support", Href = "", ClassColor = "bg-orange-50", IsCurrent = false });
+            TabItems.Add(new TabItem { Id = 1, Name = "General", Href = "", ClassColor = "bg-green-50", IsCurrent = false });
+            TabItems.Add(new TabItem { Id = 2, Name = "Advance", Href = "", ClassColor = "bg-indigo-50", IsCurrent = false });
+            TabItems.Add(new TabItem { Id = 3, Name = "Support", Href = "", ClassColor = "bg-orange-50", IsCurrent = false });
 
             return TabItems;
         }

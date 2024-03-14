@@ -13,3 +13,6 @@
 .active {
         @apply bg-gray-800 text-white;
 }
+.text-danger {
+    @apply text-red-400 text-xs;
+}

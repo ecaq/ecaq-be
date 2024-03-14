@@ -19,7 +19,7 @@
                 <nav class="-mb-px flex space-x-4 px-6" aria-label="Tabs">
                     @foreach (var item in TabItems!.ToList())
                     {
-                        <a id="@item.Id" @onclick="@(() => TabChangedHandler(item))" class="cursor-pointer border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 border-b-2 font-medium text-sm @(item.Id == activeTab ? "border-b-4 border-indigo-500 font-bold" : "border-transparent hover:text-gray-800 hover:border-gray-800")">
+                        <a id="@item.Id" @onclick="@(() => TabChangedHandler(item))" class="cursor-pointer text-gray-500 whitespace-nowrap py-4 border-b-2 font-medium text-sm @(item.Id == activeTab ? "border-b-4 border-indigo-500 font-bold text-gray-900" : "border-transparent hover:border-gray-400")">
                             @item.Name
                         </a>
                     }

@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@inherits LayoutComponentBase
 
 <!--
   This example requires some changes to your config:
@@ -178,15 +179,22 @@
 
 
     <div class="lg:pl-72">
-
-        <Ecaq.Components.Layout.components.TopBar />
+        <AuthorizeView>
+            <Authorized>
+                <Ecaq.Components.Layout.components.TopBar />
+            </Authorized>
+        </AuthorizeView>
 
         <main class="py-10">
             <div class="px-4 sm:px-6 lg:px-8">
                 @Body
             </div>
+
         </main>
+        <FluentDialogProvider @rendermode="RenderMode.InteractiveServer" />
     </div>
+
+
 </div>
 
 

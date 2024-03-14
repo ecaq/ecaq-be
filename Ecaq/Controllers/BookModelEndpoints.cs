@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Ecaq.Data;
+﻿using Ecaq.Data;
 using Ecaq.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
 namespace Ecaq.Controllers;
 
 public static class BookModelEndpoints
 {
-    public static void MapBookModelEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapBookModelEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/BookModel").WithTags(nameof(BookModel));
 
@@ -47,7 +46,7 @@ public static class BookModelEndpoints
         {
             db.BookModels.Add(bookModel);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/BookModel/{bookModel.Id}",bookModel);
+            return TypedResults.Created($"/api/BookModel/{bookModel.Id}", bookModel);
         })
         .WithName("CreateBookModel")
         .WithOpenApi();
