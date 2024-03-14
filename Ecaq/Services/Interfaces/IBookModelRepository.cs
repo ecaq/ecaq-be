@@ -2,6 +2,6 @@
 
 namespace Ecaq.Services.Interfaces;
 
-public interface IBookModelRepository: IRepository<BookModel>
+public interface IBookModelRepository : IRepository<BookModel>
 {
 }

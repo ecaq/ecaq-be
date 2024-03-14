@@ -1,6 +1,6 @@
 ﻿namespace Ecaq.Models;
 
-public class MemberModel: BaseEntity
+public class MemberModel : BaseEntity
 {
     public string MemberName { get; set; }
     public string Description { get; set; }

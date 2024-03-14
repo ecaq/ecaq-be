@@ -1,15 +1,7 @@
 ﻿using Ecaq.Models;
 using Ecaq.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
 
 namespace Ecaq.Controllers;
@@ -21,10 +13,10 @@ public class CityController : ControllerBase
     private readonly IConfiguration _configuration;
 
     private readonly IWebHostEnvironment _hostingEnv;
-    private readonly IEmailSender _emailSender;
+    private readonly IEmailSenderApp _emailSender;
     private readonly string SECRET_KEY = "6LemEtoaAAAAADtXSsjeZGH2lpZ3LnrYWNvFDc_X";
     private readonly JsonSerializerOptions _jsonOptions;
-    public CityController(IConfiguration configuration, IWebHostEnvironment hostingEnv, IEmailSender emailSender)
+    public CityController(IConfiguration configuration, IWebHostEnvironment hostingEnv, IEmailSenderApp emailSender)
     {
         _configuration = configuration;
         _hostingEnv = hostingEnv;
@@ -212,7 +204,7 @@ public class CityController : ControllerBase
             Ecaq.Helpers.Utility.DeletedToJsonFile(fullPath, id, _jsonOptions);
             return Ok();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             return Ok(e.Message);
         }

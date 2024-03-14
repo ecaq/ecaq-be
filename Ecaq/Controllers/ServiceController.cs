@@ -1,16 +1,10 @@
-﻿using Ecaq.Components;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text;
-using Ecaq.Services.Interfaces;
-using Ecaq.Data;
-using Ecaq.Models;
+﻿using Ecaq.Data;
 using Ecaq.Helpers;
+using Ecaq.Models;
+using Ecaq.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Ecaq.Controllers;
 
@@ -22,10 +16,10 @@ public class ServiceController : ControllerBase
     private readonly IConfiguration _configuration;
 
     private readonly IWebHostEnvironment _hostingEnv;
-    private readonly IEmailSender _emailSender;
+    private readonly IEmailSenderApp _emailSender;
     private readonly string SECRET_KEY = "6LemEtoaAAAAADtXSsjeZGH2lpZ3LnrYWNvFDc_X";
     private readonly JsonSerializerOptions _jsonOptions;
-    public ServiceController(IConfiguration configuration, IWebHostEnvironment hostingEnv, IEmailSender emailSender)
+    public ServiceController(IConfiguration configuration, IWebHostEnvironment hostingEnv, IEmailSenderApp emailSender)
     {
         _configuration = configuration;
         _hostingEnv = hostingEnv;

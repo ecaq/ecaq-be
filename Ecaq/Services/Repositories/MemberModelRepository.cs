@@ -8,6 +8,6 @@ public class MemberModelRepository : Repository<MemberModel>, IMemberModelReposi
 {
     public MemberModelRepository(AppDbContext context) : base(context)
     {
-        
+
     }
 }

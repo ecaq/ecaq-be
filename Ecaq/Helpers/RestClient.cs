@@ -1,5 +1,4 @@
 ﻿using Ecaq.Models;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -111,9 +110,9 @@ namespace Ecaq.Helpers
 
                     if (res.IsSuccessStatusCode)
                     {
-                        
+
                         var cSharpObject = await res.Content.ReadFromJsonAsync<ReCaptchaResponse>();
-                        
+
                         // the same as above but two way process.
                         string jsonString = await res.Content.ReadAsStringAsync();
                         var cSharpObject2 = JsonSerializer.Deserialize<ReCaptchaResponse>(jsonString);

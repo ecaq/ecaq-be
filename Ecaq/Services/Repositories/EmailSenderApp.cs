@@ -1,4 +1,6 @@
-﻿using Ecaq.Services.Interfaces;
+﻿using Ecaq.Data;
+using Ecaq.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System.Net;
 using System.Net.Mail;
 
@@ -6,11 +8,11 @@ namespace Ecaq.Services.Repositories
 {
     // This class is used by the application to send email for account confirmation and password reset.
     // For more details see https://go.microsoft.com/fwlink/?LinkID=532713
-    public class EmailSender : IEmailSender
+    public class EmailSenderApp : IEmailSenderApp
     {
         private IWebHostEnvironment _hostingEnv;
         private readonly IConfiguration _config;
-        public EmailSender(IWebHostEnvironment hostingEnv, IConfiguration config)
+        public EmailSenderApp(IWebHostEnvironment hostingEnv, IConfiguration config)
         {
             _hostingEnv = hostingEnv;
             _config = config;
@@ -22,7 +24,7 @@ namespace Ecaq.Services.Repositories
 
             string bodyMessage = CreateEmailBody(name, email, htmlTemplate, optparam1, optparam2, link);
 
-            var result = await SendEmailAsync(name, email, subject, message, true);
+            var result = await SendEmailAsync(name, email, subject, bodyMessage, true);
 
             return await ValueTask.FromResult(result);
         }
@@ -33,12 +35,12 @@ namespace Ecaq.Services.Repositories
 
             string body = string.Empty;
             //using streamreader for reading my htmltemplate
-            if(string.IsNullOrEmpty(htmlTemplate))
+            if (string.IsNullOrEmpty(htmlTemplate))
             {
                 htmlTemplate = "Default";
             }
 
-            using (StreamReader reader = new StreamReader(webRootPath + "/emailtemplate/" + htmlTemplate + ".html"))
+            using (StreamReader reader = new StreamReader(webRootPath + "/email-template/" + htmlTemplate + ".html"))
             {
                 body = reader.ReadToEnd();
             }
@@ -107,6 +109,21 @@ namespace Ecaq.Services.Repositories
             }
             return ValueTask.FromResult(msgToReturn);
         }
+
+        //public ValueTask SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public async ValueTask SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink)
+        //{
+        //    await SendEmailAsHtmlAsync(user.Name, email, "Forgot Password", "", "ForgotPassword", "", "", resetLink);
+        //}
+
+        //public ValueTask SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
     }
 }

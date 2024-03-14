@@ -1,13 +1,16 @@
+using AutoMapper;
 using Ecaq.Client.Pages;
 using Ecaq.Components;
 using Ecaq.Components.Account;
-using Ecaq.Data;
 using Ecaq.Controllers;
+using Ecaq.Data;
+using Ecaq.Helpers;
+using Ecaq.Services.Interfaces;
+using Ecaq.Services.Repositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Ecaq.Services.Repositories;
-using Ecaq.Services.Interfaces;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +33,7 @@ builder.Services.AddAuthentication(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString), 
+    options.UseSqlServer(connectionString),
     ServiceLifetime.Transient); //// this will reset your model to its original value if you decided to cancel the operations (ie. browse and replace photo from fileman then cancel the form).
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -42,14 +45,21 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders()
     .AddApiEndpoints();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailSender<ApplicationUser>, EmailSenderRepository>();
+builder.Services.AddScoped<IEmailSenderApp, EmailSenderApp>();
+builder.Services.AddScoped<IHomeBannerRepository, HomeBannerRepository>();
+builder.Services.AddScoped<IAboutRepository, AboutRepository>();
+builder.Services.AddScoped<IEcaqCoreModelRepository, EcaqCoreModelRepository>();
+builder.Services.AddScoped<IMemberModelRepository, MemberModelRepository>();
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 // also use for RoxyFileman to be able to create folder
 builder.Services.AddSession(options =>
@@ -72,12 +82,22 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins(builder.Configuration["Cors:Origin1"]!, builder.Configuration["Cors:Origin2"]!,
-                              builder.Configuration["Cors:Origin3"]!, builder.Configuration["Cors:Origin4"]!, builder.Configuration["Cors:Origin4"]!)
+                              builder.Configuration["Cors:Origin3"]!, builder.Configuration["Cors:Origin4"]!,
+                              builder.Configuration["Cors:Origin5"]!)
                               .AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
+builder.Services.AddFluentUIComponents();
+
 var app = builder.Build();
+// Get the Automapper, we can share this too
+var mapper = app.Services.GetService<IMapper>();
+if (mapper == null)
+{
+    throw new InvalidOperationException(
+      "Mapper not found");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -114,6 +134,11 @@ app.MapAdditionalIdentityEndpoints();
 
 app.MapControllers();
 
+
+app.MapHomeBannerEndpoint();
+app.MapAboutEndpoint();
+app.MapEcaqCoreEndpoint();
+app.MapGalleryEndpoint(app.Environment, mapper);
 app.MapMemberModelEndpoints();
 app.MapBookModelEndpoints();
 
