@@ -30,7 +30,7 @@ jobs:
       with:
         files: './Release/appsettings.json'
       env:
-        ConnectionStrings.DefaultConnection: ${{ secrets.MY_CONNECTION_STRING }}
+        ConnectionStrings.DefaultConnection: ${{ secrets.MY_CONNECTION_STRING_QA }}
         Smtp.host: ${{ secrets.SMTP_HOST }}
         Smtp.usr: ${{ secrets.SMTP_USR }}
         Smtp.pwd: ${{ secrets.SMTP_PWD }}

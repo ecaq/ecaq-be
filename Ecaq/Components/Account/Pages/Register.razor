@@ -19,7 +19,7 @@
 
 <PageTitle>Register</PageTitle>
 
-<h1>Register</h1>
+@* <h1>Register</h1>
 
 <div class="row">
     <div class="col-md-4">
@@ -55,6 +55,73 @@
         </section>
     </div>
 </div>
+ *@
+
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create a new account.</h2>
+    </div>
+    <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
+        @* <StatusMessage Message="@errorMessage" /> *@
+        <EditForm class="space-y-6" Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+            <DataAnnotationsValidator />
+            <div>
+                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                    <label for="qid" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Name</label>
+                    <InputText @bind-Value="@Input.Name" aria-required="true" placeholder=""
+                               class="p-0 block w-full border-0 py-2 text-appBlack bg-white focus:ring-0 text-sm outline-none tracking-normal" />
+                </div>
+                <ValidationMessage For="() => Input.Name" class="text-danger" />
+            </div>
+            <div>
+                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                    <label for="qid" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Email</label>
+                    <InputText @bind-Value="@Input.Email" aria-required="true" placeholder=""
+                               class="p-0 block w-full border-0 py-2 text-appBlack bg-white focus:ring-0 text-sm outline-none tracking-normal" />
+                </div>
+                <ValidationMessage For="() => Input.Email" class="text-danger" />
+            </div>
+
+            <div>
+                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                    <label for="qid" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Password</label>
+                    <InputText type="password" @bind-Value="@Input.Password" aria-required="true" placeholder=""
+                               class="p-0 block w-full border-0 py-2 text-appBlack bg-white focus:ring-0 text-sm outline-none tracking-normal" />
+                </div>
+                <ValidationMessage For="() => Input.Password" class="text-danger" />
+            </div>
+
+            <div>
+                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                    <label for="qid" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Confirm Password</label>
+                    <InputText type="password" @bind-Value="@Input.ConfirmPassword" aria-required="true" placeholder=""
+                               class="p-0 block w-full border-0 py-2 text-appBlack bg-white focus:ring-0 text-sm outline-none tracking-normal" />
+                </div>
+                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+            </div>
+
+            <div class="mb-2">
+                <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Register
+                </button>
+            </div>
+        </EditForm>
+
+        <p class="mt-10 text-center text-sm text-gray-500 text-danger">
+            <section>
+                <h3>Use another service to register.</h3>
+                <hr />
+                <ExternalLoginPicker />
+            </section>
+        </p>
+
+    </div>
+
+</div>
+
+
+
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
@@ -70,7 +137,7 @@
     public async Task RegisterUser(EditContext editContext)
     {
         var user = CreateUser();
-
+        user.Name = Input.Name;
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -82,7 +149,9 @@
             return;
         }
 
-        Logger.LogInformation("User created a new account with password.");
+        await UserManager.AddToRoleAsync(user, "User");
+
+        Logger.LogInformation("User created a new account with password and role.");
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
@@ -93,6 +162,7 @@
 
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
+        // this is optional, can be remove
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
         {
             RedirectManager.RedirectTo(
@@ -128,6 +198,10 @@
 
     private sealed class InputModel
     {
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; } = "";
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

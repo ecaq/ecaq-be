@@ -15,31 +15,9 @@
 
 
 
-<!--
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
-<!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-white">
-  <body class="h-full">
-  ```
--->
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+        <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account.</h2>
     </div>
     <div class="mt-6 sm:mx-auto sm:w-full sm:max-w-sm">
         @* <StatusMessage Message="@errorMessage" /> *@
@@ -93,10 +71,9 @@
             </div>
         </EditForm>
 
-        @*         <p class="mt-10 text-center text-sm text-gray-500">
-        Not a member?
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
-        </p> *@
+        <p class="mt-10 text-center text-sm text-gray-500 text-danger">
+            @errorMessage
+        </p>
 
     </div>
 
@@ -120,7 +97,7 @@
     {
         if(HttpContext is not null)
         {
-          
+
             if (HttpMethods.IsGet(HttpContext.Request.Method))
             {
                 // Clear the existing external cookie to ensure a clean login process
@@ -137,7 +114,14 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+            if (!string.IsNullOrEmpty(ReturnUrl))
+            {                
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
+            else
+            {
+                RedirectManager.RedirectTo("/");
+            }
         }
         else if (result.RequiresTwoFactor)
         {

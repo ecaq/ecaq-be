@@ -2,6 +2,7 @@
 
 @inject NavigationManager NavigationManager
 
+
 <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
@@ -65,6 +66,28 @@
                                         Gallery
                                     </NavLink>
                                 </li>
+                            </ul>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+                <li>
+                    <div class="text-xs font-semibold leading-6 text-gray-400">Authentication</div>
+                    <ul role="list" class="-mx-2 mt-2 space-y-1">
+
+
+                        <AuthorizeView>
+                            <Authorized>
+
+                                <li>
+                                    <NavLink Match="NavLinkMatch.All" href="/manage-users" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                                        <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                                        </svg>
+                                        Manage Users
+                                    </NavLink>
+                                </li>
+
                                 <li>
                                     <NavLink Match="NavLinkMatch.All" href="/profile" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -74,15 +97,6 @@
                                         Profile
                                     </NavLink>
                                 </li>
-                            </ul>
-                        </li>
-                    </Authorized>
-                </AuthorizeView>
-                <li>
-                    <div class="text-xs font-semibold leading-6 text-gray-400">Authentication</div>
-                    <ul role="list" class="-mx-2 mt-2 space-y-1">
-                        <AuthorizeView>
-                            <Authorized>
 
                                 <li>
                                     <NavLink Match="NavLinkMatch.All" href="auth" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
@@ -96,13 +110,16 @@
                                     </NavLink>
                                 </li>
 
-
                                 <li>
                                     <NavLink href="Account/Register" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                                         <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
                                     </NavLink>
                                 </li>
 
+                            </Authorized>
+                        </AuthorizeView>
+                        <AuthorizeView>
+                            <Authorized>
                                 <li>
                                     <form action="Account/Logout" method="post">
                                         <AntiforgeryToken />
@@ -145,6 +162,7 @@
 
     protected override void OnInitialized()
     {
+
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
     }

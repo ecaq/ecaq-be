@@ -1352,6 +1352,10 @@ select {
   max-width: 20rem;
 }
 
+.max-w-2xl {
+  max-width: 42rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1433,6 +1437,10 @@ select {
   flex-direction: column;
 }
 
+.place-items-center {
+  place-items: center;
+}
+
 .items-start {
   align-items: flex-start;
 }
@@ -1481,6 +1489,11 @@ select {
 
 .gap-y-7 {
   row-gap: 1.75rem;
+}
+
+.gap-x-6 {
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
 }
 
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
@@ -1871,6 +1884,16 @@ select {
   padding-bottom: 2rem;
 }
 
+.px-3\.5 {
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+}
+
+.py-24 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
 .pb-20 {
   padding-bottom: 5rem;
 }
@@ -2017,6 +2040,10 @@ select {
 
 .leading-9 {
   line-height: 2.25rem;
+}
+
+.leading-7 {
+  line-height: 1.75rem;
 }
 
 .tracking-normal {
@@ -2327,11 +2354,6 @@ select {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-.hover\:text-indigo-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity));
 }
 
 .hover\:text-indigo-900:hover {
@@ -2661,6 +2683,11 @@ select {
     padding-right: 1.5rem;
   }
 
+  .sm\:py-32 {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+
   .sm\:pl-6 {
     padding-left: 1.5rem;
   }
@@ -2685,6 +2712,16 @@ select {
   .sm\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
+  }
+
+  .sm\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .sm\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   }
 }
 

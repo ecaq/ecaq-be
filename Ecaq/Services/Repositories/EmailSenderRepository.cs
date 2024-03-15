@@ -15,7 +15,7 @@ namespace Ecaq.Services.Repositories
 
         public async Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink)
         {
-            //await SendEmailAsHtmlAsync(user.Name, email, "Forgot Password", "", "ForgotPassword", "", "", resetLink);
+            await _emailSender.SendEmailAsHtmlAsync(user.Name, email, "Email Confirmation", "", "EmailConfirmation", "", "", confirmationLink);
         }
 
         public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode)

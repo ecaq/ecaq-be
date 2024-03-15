@@ -1,0 +1,298 @@
+﻿@page "/manage-users"
+@page "/manage-users/index"
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize]
+@rendermode InteractiveServer
+
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject IUserStore<ApplicationUser> UserStore
+
+@inject IEcaqCoreModelRepository _ecaqcoreRepo
+@inject IDialogService DialogService
+
+<PageTitle>Ecaq Core</PageTitle>
+
+
+
+@if (appUsers is not null && appUsers.Count() > 0)
+{
+
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-xl font-semibold text-gray-900">Profile List</h1>
+                <p class="mt-2 text-sm text-gray-700">A list of all the profile available.</p>
+            </div>
+        </div>
+        <div class="mt-8 flex flex-col">
+            <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email Confirmed</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role (@selectedRole)</th>
+                                    <th scope="col" class="relative px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        <a href="/ecaq-core/add" class="cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                            </svg>
+                                        </a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                            @foreach (var item in appUsers)
+                                {
+                                    <tr>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            <div class="text-gray-900">
+                                                @item.Name
+                                            </div>
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            @item.Email
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            <input id="IsEmailConfirmed" name="IsActive" @bind="@item.EmailConfirmed" @onclick="@((p) => ActiveToggle(item, item.EmailConfirmed))" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            
+                                            <select id="role" @onchange="@((args) => DoStuff(args, item))" class="block w-full border-0 pl-6 text-appDarkBlue dark:text-appNeuPri focus:ring-0 sm:text-sm">
+                                            <option selected></option>
+                                            @if (roles is not null)
+                                            {
+                                                foreach (var r in roles)
+                                                {
+                                                    <option value="@r.Name">@r.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                        @* <InputSelect id="titleCode" @bind-Value="@selectedRole" class="block w-full border-0 pl-6 text-appDarkBlue dark:text-appNeuPri focus:ring-0 sm:text-sm">
+                                            <option selected></option>
+                                            @if (roles is not null)
+                                            {
+                                                foreach (var r in roles)
+                                                {
+                                                    <option value="@r.Id">@r.Name</option>
+                                                }
+                                            }
+                                        </InputSelect> *@
+                                        </td>
+                                        <td class="flex relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                            <a class="px-2 cursor-pointer" @onclick="@((p) => DeleteItem(item))">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </a>
+                                            <a href="/manage-users/role" class="px-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                </svg>
+                                            </a>
+                                            <a class="px-2 cursor-pointer" @onclick="@(() => OpenDialogAsync(item))">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                                <!-- More people... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+@code {
+    List<ApplicationUser> appUsers = new();
+    List<IdentityRole> roles = new();
+    List<ApplicationUserWithRole> appUsersInRole = new();
+    List<UsersViewModel> userViewModel = new();
+
+    string selectedRole = "";
+    protected override async Task OnInitializedAsync()
+    {       
+
+        GetUsers();
+        GetRoles();
+        await base.OnInitializedAsync();
+    }
+
+    async void GetUsers()
+    {
+        userViewModel = new List<UsersViewModel>();
+        appUsers = UserManager.Users.ToList();
+        foreach(var user in appUsers)
+        {
+            userViewModel.Add(new UsersViewModel()
+            {
+                AppUser = user,
+                Name = user.Name,
+                Email = user.Email!,
+                Role = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!
+            });
+        }
+
+
+        // var u = UserManager.Users.Select(c => new UsersViewModel()
+        //     {
+        //         AppUser = c,
+        //         Name = c.UserName,
+        //         Email = c.Email,
+        //         Role = Task.Run(async () => await GetUserRole(c))
+        //     }).ToList();
+
+        //      return u;
+    }
+
+    async Task<string?> GetUserRole(ApplicationUser u)
+    {
+        var s = (await UserManager.GetRolesAsync(u)).FirstOrDefault();
+        return s;
+    }
+    async void GetUserInRoles()
+    {
+        var r = await UserManager.GetUsersInRoleAsync("User");
+
+    }
+
+    void GetRoles()
+    {
+        roles = RoleManager.Roles.ToList();
+
+    }
+    async void DoStuff(ChangeEventArgs e, ApplicationUser user)
+    {
+        selectedRole = e.Value?.ToString()!;
+        var currentRole = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!;
+        if (selectedRole == currentRole) return;
+        if (!string.IsNullOrEmpty(currentRole))
+        {
+            await UserManager.RemoveFromRoleAsync(user, currentRole);
+        }
+
+        await UserManager.AddToRoleAsync(user, selectedRole);
+    }
+
+    async Task<string> GetRole(ApplicationUser user)
+    {
+        var getRole = await UserManager.GetRolesAsync(user);
+        // if(!string.IsNullOrEmpty(getRole))
+        // {
+        //     return await Task.FromResult(getRole);
+        // }
+        return string.Empty;
+    }
+
+    private async void UpdateSort(ApplicationUser mdl, int sort)
+    {
+        //vmake.Sort = sort;
+        await SaveAsync(mdl, CrudOperation.Edit);
+    }
+    private async void ActiveToggle(ApplicationUser mdl, bool val)
+    {
+        //tradeIn.IsActive = !val;
+        await SaveAsync(mdl, CrudOperation.Edit);
+    }
+
+
+    private async void DeleteItem(ApplicationUser mdl)
+    {
+        // // var parameters = new DialogParameters();
+        // // parameters.Add("paramString", "Record");
+
+        // // var options = new MudBlazor.DialogOptions() { NoHeader = true, DisableBackdropClick = true, MaxWidth = MaxWidth.ExtraSmall };
+
+
+
+        // // var dialog = DialogService.Show<ThrowDelete>("Delete", parameters, options);
+        // // var result = await dialog.Result;
+
+        // // if (!result.Cancelled)
+        // // {
+
+        // //     await SaveAsync(profile, CrudOperation.Delete);
+        // //     await GetSellCarAsync();
+        // //     await InvokeAsync(() =>
+        // //     {
+        // //         StateHasChanged();
+        // //     });
+        // // }
+    }
+
+    async Task SaveAsync(ApplicationUser mdl, CrudOperation operation)
+    {
+
+        // switch (operation)
+        // {
+        //     case CrudOperation.Add:
+        //         await _ecaqcoreRepo.CreateAsync(mdl);
+        //         //await _db.SampleProfiles.AddAsync(profile);
+        //         break;
+        //     case CrudOperation.Edit:
+        //         await _ecaqcoreRepo.UpdateAsync(mdl);
+        //         break;
+        //     case CrudOperation.Delete:
+        //         _ecaqcoreRepo.Delete(mdl);
+        //         break;
+        //     default:
+        //         break;
+        // }
+    }
+
+
+    private async Task OpenDialogAsync(ApplicationUser user)
+    {
+        var currentRole = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!;
+        DialogParameters parameters = new()
+            {
+                Title = $"Hello {currentRole}",
+                PrimaryAction = "Yes",
+                PrimaryActionEnabled = false,
+                SecondaryAction = "No",
+                Width = "500px",
+                TrapFocus = true,
+                Modal = true,
+                PreventScroll = true
+            };
+
+        IDialogReference dialog = await DialogService.ShowDialogAsync<SimpleDialogAppUser>(user, parameters);
+        DialogResult? result = await dialog.Result;
+
+
+        if (result.Data is not null)
+        {
+            ApplicationUser? simplePerson = result.Data as ApplicationUser;
+            //DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age}) - Canceled: {result.Cancelled}");
+        }
+        else
+        {
+            //DemoLogger.WriteLine($"Dialog closed - Canceled: {result.Cancelled}");
+        }
+    }
+
+
+    private sealed class UsersViewModel
+    {
+        public ApplicationUser AppUser { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string? Role { get; set; }
+    }
+
+}
