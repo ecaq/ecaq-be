@@ -122,7 +122,6 @@
     List<ApplicationUser> appUsers = new();
     List<IdentityRole> roles = new();
     List<ApplicationUserWithRole> appUsersInRole = new();
-    List<UsersViewModel> userViewModel = new();
 
     string selectedRole = "";
     protected override async Task OnInitializedAsync()
@@ -135,18 +134,17 @@
 
     async void GetUsers()
     {
-        userViewModel = new List<UsersViewModel>();
         appUsers = UserManager.Users.ToList();
-        foreach(var user in appUsers)
-        {
-            userViewModel.Add(new UsersViewModel()
-            {
-                AppUser = user,
-                Name = user.Name,
-                Email = user.Email!,
-                Role = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!
-            });
-        }
+        // foreach(var user in appUsers)
+        // {
+        //     userViewModel.Add(new UsersViewModel()
+        //     {
+        //         AppUser = user,
+        //         Name = user.Name,
+        //         Email = user.Email!,
+        //         Role = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!
+        //     });
+        // }
 
 
         // var u = UserManager.Users.Select(c => new UsersViewModel()
@@ -259,40 +257,56 @@
     private async Task OpenDialogAsync(ApplicationUser user)
     {
         var currentRole = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!;
+        var currentName = user.Name;
+        var currentEmailConfirmed = user.EmailConfirmed;
+        ApplicationUserWithRole editUser = new();
+        editUser.AppUser = user;
+        editUser.Role = currentRole;
+        editUser.Roles = roles;
+
         DialogParameters parameters = new()
             {
-                Title = $"Hello {currentRole}",
-                PrimaryAction = "Yes",
-                PrimaryActionEnabled = false,
-                SecondaryAction = "No",
+                //Title = $"Hello {currentRole}",
+                PrimaryAction = "Update",
+                PrimaryActionEnabled = true,
+                SecondaryAction = "Cancel",
                 Width = "500px",
                 TrapFocus = true,
                 Modal = true,
                 PreventScroll = true
             };
 
-        IDialogReference dialog = await DialogService.ShowDialogAsync<SimpleDialogAppUser>(user, parameters);
+        IDialogReference dialog = await DialogService.ShowDialogAsync<EditDialog>(editUser, parameters);
         DialogResult? result = await dialog.Result;
 
 
+        if (result.Cancelled)
+        {
+            //DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age}) - Canceled: {result.Cancelled}");
+            user.Name = currentName;
+            user.EmailConfirmed = currentEmailConfirmed;
+            return;
+        }
         if (result.Data is not null)
         {
-            ApplicationUser? simplePerson = result.Data as ApplicationUser;
-            //DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age}) - Canceled: {result.Cancelled}");
+            // //Handle the data
+            await UserManager.UpdateAsync(editUser.AppUser);
+
+
+            if (editUser.Role == currentRole) return;
+            await UserManager.RemoveFromRoleAsync(user, currentRole);
+            await UserManager.AddToRoleAsync(user, editUser.Role);
+
         }
-        else
-        {
-            //DemoLogger.WriteLine($"Dialog closed - Canceled: {result.Cancelled}");
-        }
+        // //Handle closing the dialog
+        // await Task.Run(() => ...);
     }
 
 
-    private sealed class UsersViewModel
-    {
-        public ApplicationUser AppUser { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string? Role { get; set; }
-    }
+    // private sealed class AppUserToEdit
+    // {
+    //     public ApplicationUser AppUser { get; set; }
+    //     public List<IdentityRole> Roles { get; set; }
+    // }
 
 }
