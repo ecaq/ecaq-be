@@ -120,12 +120,14 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseSession(); // also use for RoxyFileman to be able to create folder
-app.UseAntiforgery();
+app.UseRouting();
 
 app.UseCors("MyAllowSpecificOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
