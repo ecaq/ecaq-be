@@ -2,22 +2,56 @@
 
 @* <FluentMessageBarProvider Section="@App.MESSAGES_DIALOG" MaxMessageCount="1" /> *@
 
-
-
 @if (Dialog != null)
 {
-    <FluentStack Orientation="Orientation.Vertical" Style="border: 1px solid red; padding: 10px">
-        <span>Current Role: @Content.Role</span>
-        <FluentTextField @bind-Value="@Content.AppUser.Name">Your firstname:</FluentTextField>
-        <FluentTextField @bind-Value="@Content.AppUser.Email">Your lastname:</FluentTextField>
-        <FluentSwitch @bind-Value=@Content.AppUser.EmailConfirmed Label=" Email Confirmed" />
-        <FluentSelect Items=@Content.Roles
-                      OptionText="@(i => i.Name)"
-                      OptionValue="@(i => i.Name)"
-                      @bind-Value="@Content.Role" />
-@*         <FluentButton OnClick="@(() => ToggleDialogPrimaryActionButton(true))">Enable Dialog Primary Action</FluentButton>
-        <FluentButton OnClick="@(() => ToggleDialogPrimaryActionButton(false))">Disable Dialog Primary Action</FluentButton> *@
-    </FluentStack>
+
+
+
+    <div class="bg-white p-4">
+        <div class="sm:flex flex-1 sm:items-start">
+            <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div class="flex-1 mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <div class="mt-2">
+                    <div class="mt-4">
+                        <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                            <label for="qid" class="absolute bg-white -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Name</label>
+                            <InputText @bind-Value="@Content.AppUser.Name" aria-required="true" placeholder=""
+                                       class="p-0 block w-full border-0 py-2 text-appBlack bg-white focus:ring-0 text-sm outline-none tracking-normal" />
+                        </div>
+                    </div>
+                    <FluentSwitch Class="my-4" @bind-Value=@Content.AppUser.EmailConfirmed Label=" Email Confirmed" />
+@*                     <FluentSelect Items=@Content.Roles
+                                  OptionText="@(i => i.Name)"
+                                  OptionValue="@(i => i.Name)"
+                                  @bind-Value="@Content.Role" Label="Roles" /> *@
+
+
+                    <MyInputSelect Label="Roles" BgColor="bg-white">
+                        <ModelFragment>
+                            <InputSelect id="nationalityCode" @bind-Value="@Content.Role" class="p-0 block w-full border-0 py-2 text-appBlack focus:ring-0 text-sm outline-none tracking-normal">
+                                <option selected></option>
+                                @if (Content.Roles is not null)
+                                {
+                                    foreach (var item in Content.Roles.ToList())
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </ModelFragment>
+                        <ErrorValidationRF>
+                        </ErrorValidationRF>
+                    </MyInputSelect>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
 }
 
 @code {

@@ -124,6 +124,9 @@ app.UseAntiforgery();
 
 app.UseCors("MyAllowSpecificOrigins");
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()

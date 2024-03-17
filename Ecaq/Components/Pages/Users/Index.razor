@@ -1,15 +1,10 @@
 ﻿@page "/manage-users"
 @page "/manage-users/index"
-@using Microsoft.AspNetCore.Identity
 
-@attribute [Authorize]
 @rendermode InteractiveServer
 
 @inject UserManager<ApplicationUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
-@inject IUserStore<ApplicationUser> UserStore
-
-@inject IEcaqCoreModelRepository _ecaqcoreRepo
 @inject IDialogService DialogService
 
 <PageTitle>Ecaq Core</PageTitle>
@@ -22,8 +17,8 @@
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-                <h1 class="text-xl font-semibold text-gray-900">Profile List</h1>
-                <p class="mt-2 text-sm text-gray-700">A list of all the profile available.</p>
+                <h1 class="text-xl font-semibold text-gray-900">Users List</h1>
+                <p class="mt-2 text-sm text-gray-700">A list of all the user available.</p>
             </div>
         </div>
         <div class="mt-8 flex flex-col">
@@ -36,7 +31,6 @@
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email Confirmed</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role (@selectedRole)</th>
                                     <th scope="col" class="relative px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         <a href="/ecaq-core/add" class="cursor-pointer">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,42 +53,9 @@
                                             @item.Email
                                         </td>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            <input id="IsEmailConfirmed" name="IsActive" @bind="@item.EmailConfirmed" @onclick="@((p) => ActiveToggle(item, item.EmailConfirmed))" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
-                                        </td>
-                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                            
-                                            <select id="role" @onchange="@((args) => DoStuff(args, item))" class="block w-full border-0 pl-6 text-appDarkBlue dark:text-appNeuPri focus:ring-0 sm:text-sm">
-                                            <option selected></option>
-                                            @if (roles is not null)
-                                            {
-                                                foreach (var r in roles)
-                                                {
-                                                    <option value="@r.Name">@r.Name</option>
-                                                }
-                                            }
-                                        </select>
-                                        @* <InputSelect id="titleCode" @bind-Value="@selectedRole" class="block w-full border-0 pl-6 text-appDarkBlue dark:text-appNeuPri focus:ring-0 sm:text-sm">
-                                            <option selected></option>
-                                            @if (roles is not null)
-                                            {
-                                                foreach (var r in roles)
-                                                {
-                                                    <option value="@r.Id">@r.Name</option>
-                                                }
-                                            }
-                                        </InputSelect> *@
+                                            <input id="IsEmailConfirmed" name="IsActive" @bind="@item.EmailConfirmed" @onclick="@((p) => ActiveToggle(item, item.EmailConfirmed))" type="checkbox" disabled class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
                                         </td>
                                         <td class="flex relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <a class="px-2 cursor-pointer" @onclick="@((p) => DeleteItem(item))">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </a>
-                                            <a href="/manage-users/role" class="px-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                </svg>
-                                            </a>
                                             <a class="px-2 cursor-pointer" @onclick="@(() => OpenDialogAsync(item))">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -158,6 +119,11 @@
         //      return u;
     }
 
+    void GetRoles()
+    {
+        roles = RoleManager.Roles.ToList();
+    }
+
     async Task<string?> GetUserRole(ApplicationUser u)
     {
         var s = (await UserManager.GetRolesAsync(u)).FirstOrDefault();
@@ -169,68 +135,10 @@
 
     }
 
-    void GetRoles()
-    {
-        roles = RoleManager.Roles.ToList();
-
-    }
-    async void DoStuff(ChangeEventArgs e, ApplicationUser user)
-    {
-        selectedRole = e.Value?.ToString()!;
-        var currentRole = (await UserManager.GetRolesAsync(user)).FirstOrDefault()!;
-        if (selectedRole == currentRole) return;
-        if (!string.IsNullOrEmpty(currentRole))
-        {
-            await UserManager.RemoveFromRoleAsync(user, currentRole);
-        }
-
-        await UserManager.AddToRoleAsync(user, selectedRole);
-    }
-
-    async Task<string> GetRole(ApplicationUser user)
-    {
-        var getRole = await UserManager.GetRolesAsync(user);
-        // if(!string.IsNullOrEmpty(getRole))
-        // {
-        //     return await Task.FromResult(getRole);
-        // }
-        return string.Empty;
-    }
-
-    private async void UpdateSort(ApplicationUser mdl, int sort)
-    {
-        //vmake.Sort = sort;
-        await SaveAsync(mdl, CrudOperation.Edit);
-    }
     private async void ActiveToggle(ApplicationUser mdl, bool val)
     {
         //tradeIn.IsActive = !val;
         await SaveAsync(mdl, CrudOperation.Edit);
-    }
-
-
-    private async void DeleteItem(ApplicationUser mdl)
-    {
-        // // var parameters = new DialogParameters();
-        // // parameters.Add("paramString", "Record");
-
-        // // var options = new MudBlazor.DialogOptions() { NoHeader = true, DisableBackdropClick = true, MaxWidth = MaxWidth.ExtraSmall };
-
-
-
-        // // var dialog = DialogService.Show<ThrowDelete>("Delete", parameters, options);
-        // // var result = await dialog.Result;
-
-        // // if (!result.Cancelled)
-        // // {
-
-        // //     await SaveAsync(profile, CrudOperation.Delete);
-        // //     await GetSellCarAsync();
-        // //     await InvokeAsync(() =>
-        // //     {
-        // //         StateHasChanged();
-        // //     });
-        // // }
     }
 
     async Task SaveAsync(ApplicationUser mdl, CrudOperation operation)
@@ -266,7 +174,7 @@
 
         DialogParameters parameters = new()
             {
-                //Title = $"Hello {currentRole}",
+                Title = $"Manage account role",
                 PrimaryAction = "Update",
                 PrimaryActionEnabled = true,
                 SecondaryAction = "Cancel",
@@ -301,12 +209,5 @@
         // //Handle closing the dialog
         // await Task.Run(() => ...);
     }
-
-
-    // private sealed class AppUserToEdit
-    // {
-    //     public ApplicationUser AppUser { get; set; }
-    //     public List<IdentityRole> Roles { get; set; }
-    // }
 
 }

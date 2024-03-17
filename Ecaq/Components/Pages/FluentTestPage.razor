@@ -2,6 +2,7 @@
 
 @rendermode InteractiveServer
 
+@inject IAuthorizationService _authService
 @inject IDialogService DialogService
 
 <PageTitle>Home</PageTitle>
@@ -10,7 +11,7 @@
 </FluentHeader>
 <FluentCard Width="400px" Height="250px">
     <h2>Hello World!</h2>
-    <FluentButton Appearance="@Appearance.Accent">Click Me</FluentButton>
+    <FluentButton Loading="@loading" OnClick="@DoSomething" Appearance="@Appearance.Accent">Click Me</FluentButton>
 </FluentCard>
 
 <div>
@@ -38,8 +39,12 @@
 
 
 @code {
+    [CascadingParameter]
+    public Task<AuthenticationState> authStateTask { get; set; }
     private bool _trapFocus = true;
     private bool _modal = true;
+
+    bool loading = false;
 
     SimplePerson simplePerson = new()
         {
@@ -47,6 +52,28 @@
             Lastname = "Sanderson",
             Age = 42,
         };
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+
+    private async Task DoSomething()
+    {
+        loading = true;
+        var user = (await authStateTask).User;
+        if (user.Identity.IsAuthenticated)
+        {
+            Console.WriteLine("You are authenticated");
+        }
+        if (user.IsInRole("Admin"))
+        {
+
+            Console.WriteLine("You are authenticated with admin role");
+        }
+        await Task.Delay(2000);
+        loading = false;
+    }
 
     private async Task OpenDialogAsync()
     {
