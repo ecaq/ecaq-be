@@ -150,7 +150,8 @@ try
     await context.Database.MigrateAsync();
     //// Seeding
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    await Seed.SeedData(context, userManager);
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await Seed.SeedData(context, userManager, roleManager);
 }
 catch (Exception ex)
 {

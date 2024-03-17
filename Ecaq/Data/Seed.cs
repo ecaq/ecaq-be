@@ -5,12 +5,31 @@ namespace Ecaq.Data;
 public class Seed
 {
 
-    public static async Task SeedData(AppDbContext context, UserManager<ApplicationUser> userManager)
+    public static async Task SeedData(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
+        if (!roleManager.Roles.Any())
+        {
+            //var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roles = new[] { "Admin", "Manager", "User" };
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    IdentityRole roleRole = new(role);
+                    await roleManager.CreateAsync(roleRole);
+                }
+            }
+        }
         if (!userManager.Users.Any())
         {
             var users = new List<ApplicationUser>
                 {
+                    new ApplicationUser
+                    {
+                        Name = "Felix",
+                        UserName = "fam.ecaq@gmail.com",
+                        Email = "fam.ecaq@gmail.com"
+                    },
                     new ApplicationUser
                     {
                         Name = "Felix",
@@ -22,6 +41,7 @@ public class Seed
             foreach (var user in users)
             {
                 await userManager.CreateAsync(user, "@wesomeG0d");
+                await userManager.AddToRoleAsync(user, "Admin");
             }
         }
 

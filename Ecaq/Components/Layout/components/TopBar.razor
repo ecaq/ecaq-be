@@ -33,10 +33,13 @@
 
             <!-- Separator -->
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true"></div>
+            <AuthorizeView Roles="Manager, Admin">
+                <Authorized>
+                    <!-- Profile -->
+                    <Ecaq.Components.Layout.components.Profile />
+                </Authorized>
+            </AuthorizeView>
 
-
-            <!-- Profile -->
-            <Ecaq.Components.Layout.components.Profile />
 
         </div>
     </div>

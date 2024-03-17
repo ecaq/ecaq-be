@@ -1,0 +1,34 @@
+﻿@implements IDialogContentComponent<ApplicationUserWithRole>
+
+@* <FluentMessageBarProvider Section="@App.MESSAGES_DIALOG" MaxMessageCount="1" /> *@
+
+
+
+@if (Dialog != null)
+{
+    <FluentStack Orientation="Orientation.Vertical" Style="border: 1px solid red; padding: 10px">
+        <span>Current Role: @Content.Role</span>
+        <FluentTextField @bind-Value="@Content.AppUser.Name">Your firstname:</FluentTextField>
+        <FluentTextField @bind-Value="@Content.AppUser.Email">Your lastname:</FluentTextField>
+        <FluentSwitch @bind-Value=@Content.AppUser.EmailConfirmed Label=" Email Confirmed" />
+        <FluentSelect Items=@Content.Roles
+                      OptionText="@(i => i.Name)"
+                      OptionValue="@(i => i.Name)"
+                      @bind-Value="@Content.Role" />
+@*         <FluentButton OnClick="@(() => ToggleDialogPrimaryActionButton(true))">Enable Dialog Primary Action</FluentButton>
+        <FluentButton OnClick="@(() => ToggleDialogPrimaryActionButton(false))">Disable Dialog Primary Action</FluentButton> *@
+    </FluentStack>
+}
+
+@code {
+    [Parameter]
+    public ApplicationUserWithRole Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
+    private void ToggleDialogPrimaryActionButton(bool enable)
+    {
+        Dialog!.TogglePrimaryActionButton(enable);
+    }
+}
