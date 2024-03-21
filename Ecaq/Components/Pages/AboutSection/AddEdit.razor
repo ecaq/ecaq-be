@@ -158,6 +158,18 @@
                                                 </div>
                                             </div>
 
+
+                                            <div class="sm:col-span-6">
+                                                <label for="about" class="block text-sm font-medium text-gray-700">Description</label>
+                                                <div class="mt-1">
+                                                    <Editor ApiKey="no-api-key"
+                                                            Field="() => about.Desc2" @bind-Value="about.Desc2"
+                                                            JsConfSrc="TinyBlzRoxy"
+                                                            ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
+                                                    <p class="mt-2 text-sm text-gray-500">Write a few sentences.</p>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>

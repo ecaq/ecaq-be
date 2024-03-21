@@ -11,6 +11,6 @@ public class EcaqCoreModel : BaseEntity
     public string? Desc { get; set; } = string.Empty;
     public string Designation { get; set; } = string.Empty;
     public string? ThumbUrl { get; set; } = string.Empty;
-    public string? ImageUrl { get; set; } = string.Empty; // to do remove nullable
+    public string ImageUrl { get; set; } = string.Empty;
 
 }
