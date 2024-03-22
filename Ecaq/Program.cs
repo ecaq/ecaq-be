@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,9 @@ builder.Services.AddScoped<IAboutRepository, AboutRepository>();
 builder.Services.AddScoped<IEcaqCoreModelRepository, EcaqCoreModelRepository>();
 builder.Services.AddScoped<IMemberModelRepository, MemberModelRepository>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -144,6 +147,7 @@ app.MapHomeBannerEndpoint();
 app.MapAboutEndpoint();
 app.MapEcaqCoreEndpoint();
 app.MapGalleryEndpoint(app.Environment, mapper);
+app.MapAllianceEndpoint();
 app.MapMemberModelEndpoints();
 app.MapBookModelEndpoints();
 

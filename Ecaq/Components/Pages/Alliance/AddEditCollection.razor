@@ -1,5 +1,5 @@
-﻿@page "/alliance-collection/add"
-@page "/alliance-collection/edit/{Id:int}"
+﻿@page "/alliance-collection/add/{AllianceId:int}"
+@page "/alliance-collection/edit/{Id:int}/{AllianceId:int}"
 @rendermode InteractiveServer
 
 @inject IJSRuntime _js
@@ -169,8 +169,11 @@
 @code
 {
     [Parameter]
+    public int AllianceId { get; set; }
+    [Parameter]
     public int Id { get; set; }
 
+    //AllianceModel alliance = new();
     AllianceCollectionModel? allianceCollection = new();
     public EditContext? EditContext;
     CrudOperation crudOperation = CrudOperation.Add;
@@ -180,6 +183,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+
+
         TabItems = TabItem.TabItems();
         //TabItems = TabItems!.ToList();
         TabItemSelected = TabItems.FirstOrDefault()!;
@@ -191,10 +196,11 @@
             crudOperation = CrudOperation.Edit;
         }
         else
-        {
+        {            
             allianceCollection!.Name = "Title";
             allianceCollection!.Email = "Subtitle";
             allianceCollection.Logo = "/myassets/resources/no-image.jpg";
+            allianceCollection.AllianceModelId = AllianceId;
         }
 
         EditContext = new(allianceCollection!);
@@ -213,6 +219,12 @@
 
         //EditContext!.Validate();
         //StateHasChanged();
+    }
+
+    async Task<AllianceModel> GetAllianceAsync()
+    {
+        var alliances = await _db.AllianceModels.ToListAsync();
+        return alliances.Where(x => x.Id == AllianceId).FirstOrDefault()!;
     }
 
     void TabItemCallback(TabItem selectedTabItem)
@@ -310,7 +322,7 @@
         showRoxy = true;
     }
 
-    void GoBack() => _navManager.NavigateTo("/alliance-collection");
+    void GoBack() => _navManager.NavigateTo("/alliance-collection/" + AllianceId);
 
 }
 

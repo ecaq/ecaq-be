@@ -4,6 +4,7 @@ using Ecaq.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecaq.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240322203915_modeAllianceColForeignKey")]
+    partial class modeAllianceColForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +170,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutModels", (string)null);
+                    b.ToTable("AboutModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.AllianceCollectionModel", b =>
@@ -215,7 +218,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasIndex("AllianceModelId");
 
-                    b.ToTable("AllianceCollectionModels", (string)null);
+                    b.ToTable("AllianceCollectionModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.AllianceModel", b =>
@@ -246,7 +249,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AllianceModels", (string)null);
+                    b.ToTable("AllianceModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.BookModel", b =>
@@ -267,7 +270,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookModels", (string)null);
+                    b.ToTable("BookModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.EcaqCoreModel", b =>
@@ -304,7 +307,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EcaqCoreModels", (string)null);
+                    b.ToTable("EcaqCoreModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.GalleryModel", b =>
@@ -339,7 +342,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GalleryModels", (string)null);
+                    b.ToTable("GalleryModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.HomeBanner", b =>
@@ -396,7 +399,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HomeBanners", (string)null);
+                    b.ToTable("HomeBanners");
                 });
 
             modelBuilder.Entity("Ecaq.Models.MemberModel", b =>
@@ -444,7 +447,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MemberModels", (string)null);
+                    b.ToTable("MemberModels");
                 });
 
             modelBuilder.Entity("Ecaq.Models.SampleProfile", b =>
@@ -481,7 +484,7 @@ namespace Ecaq.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SampleProfiles", (string)null);
+                    b.ToTable("SampleProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

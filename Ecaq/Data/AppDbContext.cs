@@ -2,6 +2,7 @@ using Ecaq.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace Ecaq.Data;
 
@@ -31,7 +32,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
 
         //modelBuilder.Entity<ApplicationUser>()
         //    .HasMany(p => p.Roles).WithOne()
