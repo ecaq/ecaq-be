@@ -18,6 +18,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<EcaqCoreModel> EcaqCoreModels => Set<EcaqCoreModel>();
     public DbSet<GalleryModel> GalleryModels => Set<GalleryModel>();
     public DbSet<MemberModel> MemberModels => Set<MemberModel>();
+    public DbSet<AllianceModel> AllianceModels => Set<AllianceModel>();
+    public DbSet<AllianceCollectionModel> AllianceCollectionModels => Set<AllianceCollectionModel>();
+
 
     /// <summary>
     /// Sample
