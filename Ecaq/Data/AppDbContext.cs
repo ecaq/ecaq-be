@@ -33,6 +33,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+        modelBuilder.Entity<AllianceModel>()
+            .HasMany(a => a.AllianceCollectionModels)
+            .WithOne(b => b.AllianceModel)
+            .HasForeignKey(c => c.AllianceModelId);
+
         //modelBuilder.Entity<ApplicationUser>()
         //    .HasMany(p => p.Roles).WithOne()
         //    .HasForeignKey(p => p.UserId)

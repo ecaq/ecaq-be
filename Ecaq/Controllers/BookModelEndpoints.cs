@@ -28,37 +28,5 @@ public static class BookModelEndpoints
         .WithName("GetBookModelById")
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, BookModel bookModel, AppDbContext db) =>
-        {
-            var affected = await db.BookModels
-                .Where(model => model.Id == id)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.Id, bookModel.Id)
-                    .SetProperty(m => m.Title, bookModel.Title)
-                    .SetProperty(m => m.ISBN, bookModel.ISBN)
-                    );
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("UpdateBookModel")
-        .WithOpenApi();
-
-        group.MapPost("/", async (BookModel bookModel, AppDbContext db) =>
-        {
-            db.BookModels.Add(bookModel);
-            await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/BookModel/{bookModel.Id}", bookModel);
-        })
-        .WithName("CreateBookModel")
-        .WithOpenApi();
-
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, AppDbContext db) =>
-        {
-            var affected = await db.BookModels
-                .Where(model => model.Id == id)
-                .ExecuteDeleteAsync();
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("DeleteBookModel")
-        .WithOpenApi();
     }
 }

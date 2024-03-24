@@ -15,6 +15,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -53,9 +55,7 @@ builder.Services.AddScoped<IAboutRepository, AboutRepository>();
 builder.Services.AddScoped<IEcaqCoreModelRepository, EcaqCoreModelRepository>();
 builder.Services.AddScoped<IMemberModelRepository, MemberModelRepository>();
 
-builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 

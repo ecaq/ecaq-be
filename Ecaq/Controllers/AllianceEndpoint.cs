@@ -23,18 +23,28 @@ public static class AllianceEndpoint
             //    }
             //}
 
-            return await db.AllianceModels.ToListAsync();
+            var result = await db.AllianceModels.Include(x => x.AllianceCollectionModels).ToListAsync();
+
+            return result;
         })
         .WithName("GetAlliances")
         .WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<AllianceModel>, NotFound>> (int id, AppDbContext db) =>
+        group.MapGet("/{id}", async Task<AllianceModel> (int id, AppDbContext db) =>
         {
-            return await db.AllianceModels.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
-                is AllianceModel model
-                    ? TypedResults.Ok(model)
-                    : TypedResults.NotFound();
+            //var result = await db.AllianceModels.AsNoTracking().Include(x => x.AllianceCollectionModels)
+            //    .FirstOrDefaultAsync(model => model.Id == id)
+            //    is AllianceModel model
+            //        ? TypedResults.Ok(model)
+            //        : TypedResults.NotFound();
+            var result = await db.AllianceModels.AsNoTracking().Include(x => x.AllianceCollectionModels)
+                        .FirstOrDefaultAsync(model => model.Id == id);
+            if(result is not null)
+            {
+                return result;
+            }
+            return null;
+
         })
         .WithName("GetAlliance")
         .WithOpenApi();

@@ -28,41 +28,41 @@ public static class MemberModelEndpoints
         .WithName("GetMemberModelById")
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, MemberModel memberModel, AppDbContext db) =>
-        {
-            var affected = await db.MemberModels
-                .Where(model => model.Id == id)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(m => m.Id, memberModel.Id)
-                    .SetProperty(m => m.MemberName, memberModel.MemberName)
-                    .SetProperty(m => m.Notes, memberModel.Notes)
-                    .SetProperty(m => m.lat, memberModel.lat)
-                    .SetProperty(m => m.lng, memberModel.lng)
-                    .SetProperty(m => m.Sort, memberModel.Sort)
-                    .SetProperty(m => m.IsActive, memberModel.IsActive)
-                    );
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("UpdateMemberModel")
-        .WithOpenApi();
+        //group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, MemberModel memberModel, AppDbContext db) =>
+        //{
+        //    var affected = await db.MemberModels
+        //        .Where(model => model.Id == id)
+        //        .ExecuteUpdateAsync(setters => setters
+        //            .SetProperty(m => m.Id, memberModel.Id)
+        //            .SetProperty(m => m.MemberName, memberModel.MemberName)
+        //            .SetProperty(m => m.Notes, memberModel.Notes)
+        //            .SetProperty(m => m.lat, memberModel.lat)
+        //            .SetProperty(m => m.lng, memberModel.lng)
+        //            .SetProperty(m => m.Sort, memberModel.Sort)
+        //            .SetProperty(m => m.IsActive, memberModel.IsActive)
+        //            );
+        //    return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        //})
+        //.WithName("UpdateMemberModel")
+        //.WithOpenApi();
 
-        group.MapPost("/", async (MemberModel memberModel, AppDbContext db) =>
-        {
-            db.MemberModels.Add(memberModel);
-            await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/MemberModel/{memberModel.Id}", memberModel);
-        })
-        .WithName("CreateMemberModel")
-        .WithOpenApi();
+        //group.MapPost("/", async (MemberModel memberModel, AppDbContext db) =>
+        //{
+        //    db.MemberModels.Add(memberModel);
+        //    await db.SaveChangesAsync();
+        //    return TypedResults.Created($"/api/MemberModel/{memberModel.Id}", memberModel);
+        //})
+        //.WithName("CreateMemberModel")
+        //.WithOpenApi();
 
-        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, AppDbContext db) =>
-        {
-            var affected = await db.MemberModels
-                .Where(model => model.Id == id)
-                .ExecuteDeleteAsync();
-            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
-        })
-        .WithName("DeleteMemberModel")
-        .WithOpenApi();
+        //group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, AppDbContext db) =>
+        //{
+        //    var affected = await db.MemberModels
+        //        .Where(model => model.Id == id)
+        //        .ExecuteDeleteAsync();
+        //    return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        //})
+        //.WithName("DeleteMemberModel")
+        //.WithOpenApi();
     }
 }

@@ -7,7 +7,7 @@ namespace Ecaq.Models
         public string Title { get; set; } = string.Empty;
         public string Subtitle { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
-        public List<AllianceCollectionModel> AllianceCollectionModels { get; set; } = [];
+        public virtual List<AllianceCollectionModel>? AllianceCollectionModels { get; set; }
     }
 
     public class AllianceCollectionModel: BaseEntity
@@ -18,8 +18,8 @@ namespace Ecaq.Models
         public string Contact { get; set; } = string.Empty;
         public string Website { get; set; } = string.Empty;
         public string Logo { get; set; } = string.Empty;
-        [ForeignKey("AllianceModel")]
         public int AllianceModelId { get; set; }
-        public AllianceModel AllianceModel { get; set; }
+        [ForeignKey("AllianceModelId")]
+        public virtual AllianceModel AllianceModel { get; set; }
     }
 }
