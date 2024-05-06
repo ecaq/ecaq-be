@@ -1,10 +1,10 @@
-﻿@page "/about/add"
-@page "/about/edit/{Id:int}"
+﻿@page "/members/add"
+@page "/members/edit/{Id:int}"
 @rendermode InteractiveServer
 
 @inject IJSRuntime _js
 @inject NavigationManager _navManager
-@inject IAboutRepository _aboutRepo
+@inject IMemberModelRepository _memberRepo
 
 <PageTitle>Home Banner</PageTitle>
 
@@ -13,7 +13,7 @@
     <div class="">
 
 
-        @if(about is not null)
+        @if (member is not null)
         {
 
 
@@ -44,101 +44,55 @@
 
                                             
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Title" inputType="@inputType" @bind-Value="@about!.Title">
+                                                <MyInputText BgColor="bg-green-50" Label="Name" inputType="@inputType" @bind-Value="@member!.MemberName">
                                                     <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.Title" /></p>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => member.MemberName" /></p>
                                                     </ErrorValidationRF>
                                                 </MyInputText>
                                             </div>
-                                            <div class="sm:col-span-4">
-                                                <MyInputText BgColor="bg-green-50" Label="Subitle" inputType="@inputType" @bind-Value="@about!.Subtitle">
+                                            <div class="sm:col-span-2">
+                                                <MyInputText BgColor="bg-green-50" Label="Contact" inputType="@inputType" @bind-Value="@member!.Contact">
                                                     <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.Subtitle" /></p>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => member.Contact" /></p>
                                                     </ErrorValidationRF>
                                                 </MyInputText>
                                             </div>
 
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Nationality Label" inputType="@inputType" @bind-Value="@about!.StatNationalityText">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatNationalityText" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
+                                                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                                                    <label for="name" class="absolute bg-green-50 -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Date Established</label>
+                                                    <InputDate id="joinDate" @bind-Value="@member.JoinDate" class="p-0 block w-full border-0 py-2 bg-green-50 focus:ring-0 text-sm outline-none tracking-normal" />
+                                                </div>
+                                                <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => member.JoinDate" /></p>
                                             </div>
+
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Nationality Value" inputType="@inputType" @bind-Value="@about!.StatNationalityValue">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatNationalityValue" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
+                                                <div>
+                                                    <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                                                        <label for="name" class="absolute bg-green-50 -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Latitude</label>
+                                                        <InputNumber id="lat" @bind-Value="@member.lat" class="p-0 block w-full border-0 py-2 bg-green-50 focus:ring-0 text-sm outline-none tracking-normal" />
+                                                    </div>
+                                                    <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => member.lat" /></p>
+                                                </div>
                                             </div>
+
+                                            <div class="sm:col-span-2">
+                                                <div class="relative border border-gray-300 rounded-md px-3 shadow-sm">
+                                                    <label for="name" class="absolute bg-green-50 -top-2 left-2 -mt-px inline-block px-1 bg-beeBackground text-xs font-medium text-appBlack">Longitude</label>
+                                                    <InputNumber id="lng" @bind-Value="@member.lng" class="p-0 block w-full border-0 py-2 bg-green-50 focus:ring-0 text-sm outline-none tracking-normal" />
+                                                </div>
+                                                <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => member.lng" /></p>
+                                            </div>
+
                                             <div class="sm:col-span-2"></div>
 
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Members Label" inputType="@inputType" @bind-Value="@about!.StatMembersText">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatMembersText" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Members Value" inputType="@inputType" @bind-Value="@about!.StatMembersyValue">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatMembersyValue" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2"></div>
-
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Churches Label" inputType="@inputType" @bind-Value="@about!.StatChurchesText">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatChurchesText" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Churches Value" inputType="@inputType" @bind-Value="@about!.StatChurchesValue">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatChurchesValue" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2"></div>
-
-
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Alliance Label" inputType="@inputType" @bind-Value="@about!.StatAllianceText">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatAllianceText" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Alliance Value" inputType="@inputType" @bind-Value="@about!.StatAlianceValue">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.StatAlianceValue" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
-                                            <div class="sm:col-span-2"></div>
-
-
-
-                                            <div class="sm:col-span-6">
-                                                <MyInputText BgColor="bg-green-50" Label="Source Text" inputType="@inputType" @bind-Value="@about!.Source">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about.Source" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
 
 
                                             <div class="sm:col-span-2">
                                                 <MyInputToggle BgColor="bg-green-50" Label="Is Active">
                                                     <Toggle>
-                                                        <span @onclick="@OnIsActiveClicked" class="@(about.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
-                                                            <span class="@(about.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+                                                        <span @onclick="@OnIsActiveClicked" class="@(member.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
+                                                            <span class="@(member.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
                                                         </span>
                                                     </Toggle>
                                                 </MyInputToggle>
@@ -151,21 +105,9 @@
                                                 <label for="about" class="block text-sm font-medium text-gray-700">Description</label>
                                                 <div class="mt-1">
                                                     <Editor ApiKey="no-api-key"
-                                                            Field="() => about.Desc" @bind-Value="about.Desc"
+                                                            Field="() => member.Description" @bind-Value="member.Description"
                                                     JsConfSrc="TinyBlzRoxy"
                                                     ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
-                                                    <p class="mt-2 text-sm text-gray-500">Write a few sentences.</p>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="sm:col-span-6">
-                                                <label for="about" class="block text-sm font-medium text-gray-700">Description</label>
-                                                <div class="mt-1">
-                                                    <Editor ApiKey="no-api-key"
-                                                            Field="() => about.Desc2" @bind-Value="about.Desc2"
-                                                            JsConfSrc="TinyBlzRoxy"
-                                                            ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
                                                     <p class="mt-2 text-sm text-gray-500">Write a few sentences.</p>
                                                 </div>
                                             </div>
@@ -191,14 +133,14 @@
                                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 @* 
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-indigo-50" Label="Video Url" inputType="@inputType" @bind-Value="@about!">
+                                                <MyInputText BgColor="bg-indigo-50" Label="Video Url" inputType="@inputType" @bind-Value="@ecaqCore!">
                                                     <ErrorValidationRF>
                                                         <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about" /></p>
                                                     </ErrorValidationRF>
                                                 </MyInputText>
                                             </div>
                                             <div class="sm:col-span-2">
-                                               <MyInputTextQID BgColor="bg-indigo-50" Label="Video Duration" inputType="number" @bind-Value="@about!" MaxLength="11">
+                                               <MyInputTextQID BgColor="bg-indigo-50" Label="Video Duration" inputType="number" @bind-Value="@ecaqCore!" MaxLength="11">
                                                     <ErrorValidationRF>
                                                         <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => about" /></p>
                                                     </ErrorValidationRF>
@@ -207,9 +149,9 @@
 
 
                                             <div class="sm:col-span-2">
-                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Thumbnail</label>
+                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Logo</label>
                                                 <div class="mt-1 flex items-center cursor-pointer">
-                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@about!.BackgroundImage" id="customImage" />
+                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@member!.LogoUrl" id="customImage" />
                                                 </div>
                                                 @* <div class="flex-none w-full relative">
                                                     <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@homeBanner!.ImageMobile" id="customImage" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
@@ -259,7 +201,7 @@
     [Parameter]
     public int Id { get; set; }
 
-    AboutModel? about = new();
+    MemberModel? member = new();
     public EditContext? EditContext;
     CrudOperation crudOperation = CrudOperation.Add;
 
@@ -275,15 +217,16 @@
         if(Id > 0)
         {
             // Warning: do not use FindAsync here.
-            about = _aboutRepo.GetById(Id);
+            member = _memberRepo.GetById(Id);
             crudOperation = CrudOperation.Edit;
         }
         else
         {
-            about.BackgroundImage = "/myassets/resources/banner-desktop.jpg";
+            member.LogoUrl = "/myassets/resources/banner-desktop.jpg";
+            member.JoinDate = DateTime.Now;
         }
 
-        EditContext = new(about!);
+        EditContext = new(member!);
 
         //EditContext.NotifyValidationStateChanged();
         //EditContext.OnFieldChanged += EditContext_OnFieldChanged!;
@@ -293,20 +236,7 @@
 
     private void OnIsActiveClicked()
     {
-        about!.IsActive = !about.IsActive;
-    }
-
-    public void ToggleShowPwd()
-    {
-        if (inputType == "password")
-        {
-            inputType = "text";
-        }
-        else
-        {
-            inputType = "password";
-        }
-        //StateHasChanged();
+        member!.IsActive = !member.IsActive;
     }
 
     private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
@@ -329,25 +259,25 @@
     {
         if (!EditContext!.GetValidationMessages().Any())
         {
-            await SaveAsync(about!);
+            await SaveAsync(member!);
             GoBack();
         }
     }
 
-    async Task SaveAsync(AboutModel mdl)
+    async Task SaveAsync(MemberModel mdl)
     {
 
         switch (crudOperation)
         {
             case CrudOperation.Add:
-                await _aboutRepo.CreateAsync(mdl);
+                await _memberRepo.CreateAsync(mdl);
                 //await _db.SampleProfiles.AddAsync(profile);
                 break;
             case CrudOperation.Edit:
-                await _aboutRepo.UpdateAsync(mdl);
+                await _memberRepo.UpdateAsync(mdl);
                 break;
             case CrudOperation.Delete:
-                _aboutRepo.Delete(mdl);
+                _memberRepo.Delete(mdl);
                 break;
             default:
                 break;
@@ -390,7 +320,7 @@
         switch (ElemImgId)
         {
             case "customImage":
-                about!.BackgroundImage = returnImage;
+                member!.LogoUrl = returnImage;
                 break;
         }
 
@@ -407,7 +337,7 @@
         showRoxy = true;
     }
 
-    void GoBack() => _navManager.NavigateTo("/about");
+    void GoBack() => _navManager.NavigateTo("/members");
 
 }
 

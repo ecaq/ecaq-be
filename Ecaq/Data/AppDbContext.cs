@@ -2,6 +2,7 @@ using Ecaq.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace Ecaq.Data;
 
@@ -18,6 +19,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<EcaqCoreModel> EcaqCoreModels => Set<EcaqCoreModel>();
     public DbSet<GalleryModel> GalleryModels => Set<GalleryModel>();
     public DbSet<MemberModel> MemberModels => Set<MemberModel>();
+    public DbSet<AllianceModel> AllianceModels => Set<AllianceModel>();
+    public DbSet<AllianceCollectionModel> AllianceCollectionModels => Set<AllianceCollectionModel>();
+
 
     /// <summary>
     /// Sample
@@ -29,6 +33,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+        modelBuilder.Entity<AllianceModel>()
+            .HasMany(a => a.AllianceCollectionModels)
+            .WithOne(b => b.AllianceModel)
+            .HasForeignKey(c => c.AllianceModelId);
 
         //modelBuilder.Entity<ApplicationUser>()
         //    .HasMany(p => p.Roles).WithOne()

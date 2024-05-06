@@ -1,5 +1,5 @@
-﻿@page "/gallery/add"
-@page "/gallery/edit/{Id:int}"
+﻿@page "/alliance/add"
+@page "/alliance/edit/{Id:int}"
 @rendermode InteractiveServer
 
 @inject IJSRuntime _js
@@ -13,7 +13,7 @@
     <div class="">
 
 
-        @if(gallery is not null)
+        @if(alliance is not null)
         {
 
 
@@ -42,21 +42,29 @@
                                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Name" @bind-Value="@gallery!.Name">
+                                                <MyInputText BgColor="bg-green-50" Label="Name" @bind-Value="@alliance!.Title">
                                                     <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => gallery.Name" /></p>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => alliance.Title" /></p>
                                                     </ErrorValidationRF>
                                                 </MyInputText>
                                             </div>
                                             <div class="sm:col-span-4">
                                             </div>
 
+                                            <div class="sm:col-span-2">
+                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Browse Image</label>
+                                                <div class="mt-1 flex items-center cursor-pointer">
+                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@alliance!.ImageUrl" id="customImage" />
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-4"></div>
+
 
                                             <div class="sm:col-span-2">
                                                 <MyInputToggle BgColor="bg-green-50" Label="Is Active">
                                                     <Toggle>
-                                                        <span @onclick="@OnIsActiveClicked" class="@(gallery.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
-                                                            <span class="@(gallery.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+                                                        <span @onclick="@OnIsActiveClicked" class="@(alliance.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
+                                                            <span class="@(alliance.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
                                                         </span>
                                                     </Toggle>
                                                 </MyInputToggle>
@@ -64,10 +72,10 @@
 
 
                                             <div class="sm:col-span-6">
-                                                <label for="about" class="block text-sm font-medium text-gray-700">About</label>
+                                                <label for="about" class="block text-sm font-medium text-gray-700">Subtitle</label>
                                                 <div class="mt-1">
                                                     <Editor ApiKey="no-api-key"
-                                                    Field="() => gallery.Desc" @bind-Value="gallery.Desc"
+                                                            Field="() => alliance.Subtitle" @bind-Value="alliance.Subtitle"
                                                     JsConfSrc="TinyBlzRoxy"
                                                     ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
                                                     <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
@@ -91,24 +99,11 @@
                                     <div>
                                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 
-                                            <div class="sm:col-span-2">
-                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Browse Album Thumbnail</label>
-                                                <div class="mt-1 flex items-center cursor-pointer">
-                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@gallery!.ImageUrl" id="customImage" />
-                                                </div>
-                                            </div>
-                                            <div class="sm:col-span-4"></div>
 
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-indigo-50" Label="Album Path" @bind-Value="@gallery!.PathUrl">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => gallery.PathUrl" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
+
+
 
                                         </div>
-
                                     </div>
                             </div>
                         break;
@@ -156,7 +151,7 @@
     [Parameter]
     public int Id { get; set; }
 
-    GalleryModel? gallery = new();
+    AllianceModel? alliance = new();
     public EditContext? EditContext;
     CrudOperation crudOperation = CrudOperation.Add;
 
@@ -172,17 +167,17 @@
         if(Id > 0)
         {
             // Warning: do not use FindAsync here.
-            gallery = _db.GalleryModels.Find(Id);
+            alliance = _db.AllianceModels.Find(Id);
             crudOperation = CrudOperation.Edit;
         }
         else
         {
-            gallery!.Name = "Ank";
-            gallery!.Desc = "Yjn";
-            gallery.ImageUrl = "/myassets/resources/no-image.jpg";
+            alliance!.Title = "Title";
+            alliance!.Subtitle = "Subtitle";
+            alliance.ImageUrl = "/myassets/resources/no-image.jpg";
         }
 
-        EditContext = new(gallery!);
+        EditContext = new(alliance!);
 
         //EditContext.NotifyValidationStateChanged();
         //EditContext.OnFieldChanged += EditContext_OnFieldChanged!;
@@ -208,34 +203,34 @@
 
     private void OnIsActiveClicked()
     {
-        gallery!.IsActive = !gallery.IsActive;
+        alliance!.IsActive = !alliance.IsActive;
     }
 
     async void OnSubmitForm()
     {
         if (!EditContext!.GetValidationMessages().Any())
         {
-            await SaveAsync(gallery!);
+            await SaveAsync(alliance!);
             GoBack();
         }
     }
-    async Task SaveAsync(GalleryModel mdl)
+    async Task SaveAsync(AllianceModel mdl)
     {
 
         switch (crudOperation)
         {
             case CrudOperation.Add:
-                await _db.GalleryModels.AddAsync(mdl);
+                await _db.AllianceModels.AddAsync(mdl);
                 break;
             case CrudOperation.Edit:
                 //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
                 //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
                 _db.Entry(mdl).State = EntityState.Modified;
 
-                _db.GalleryModels.Update(mdl);
+                _db.AllianceModels.Update(mdl);
                 break;
             case CrudOperation.Delete:
-                _db.GalleryModels.Remove(mdl);
+                _db.AllianceModels.Remove(mdl);
                 break;
             default:
                 break;
@@ -243,7 +238,7 @@
         await _db.SaveChangesAsync();
         //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
         //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
-        _db.Entry<GalleryModel>(mdl).State = EntityState.Detached;
+        _db.Entry<AllianceModel>(mdl).State = EntityState.Detached;
     }
 
 
@@ -282,12 +277,9 @@
         switch (ElemImgId)
         {
             case "customImage":
-                gallery!.ImageUrl = returnImage;
+                alliance!.ImageUrl = returnImage;
                 break;
         }
-
-        int lastSlash = returnImage.LastIndexOf('/');
-        gallery!.PathUrl = (lastSlash > -1) ? returnImage.Substring(0, lastSlash) : returnImage;
 
         StateHasChanged();
     }
@@ -298,7 +290,7 @@
         showRoxy = true;
     }
 
-    void GoBack() => _navManager.NavigateTo("/gallery");
+    void GoBack() => _navManager.NavigateTo("/alliance");
 
 }
 

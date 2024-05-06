@@ -1,19 +1,19 @@
-﻿@page "/gallery/add"
-@page "/gallery/edit/{Id:int}"
+﻿@page "/alliance-collection/add/{AllianceId:int}"
+@page "/alliance-collection/edit/{Id:int}/{AllianceId:int}"
 @rendermode InteractiveServer
 
 @inject IJSRuntime _js
 @inject NavigationManager _navManager
 @inject AppDbContext _db
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Alliance Collection</PageTitle>
 
 
 <div class="max-w-7xl mx-auto">
     <div class="">
 
 
-        @if(gallery is not null)
+        @if(allianceCollection is not null)
         {
 
 
@@ -42,21 +42,42 @@
                                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 
                                             <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-green-50" Label="Name" @bind-Value="@gallery!.Name">
+                                                <MyInputText BgColor="bg-green-50" Label="Name" @bind-Value="@allianceCollection!.Name">
                                                     <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => gallery.Name" /></p>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => allianceCollection.Name" /></p>
                                                     </ErrorValidationRF>
                                                 </MyInputText>
                                             </div>
-                                            <div class="sm:col-span-4">
+                                            <div class="sm:col-span-2">
+                                                <MyInputText BgColor="bg-green-50" Label="Email" @bind-Value="@allianceCollection!.Email">
+                                                    <ErrorValidationRF>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => allianceCollection.Email" /></p>
+                                                    </ErrorValidationRF>
+                                                </MyInputText>
+                                            </div>
+                                            <div class="sm:col-span-2">
+                                                <MyInputText BgColor="bg-green-50" Label="Contact" @bind-Value="@allianceCollection!.Contact">
+                                                    <ErrorValidationRF>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => allianceCollection.Contact" /></p>
+                                                    </ErrorValidationRF>
+                                                </MyInputText>
+                                            </div>
+                                            <div class="sm:col-span-3">
+                                                <MyInputText BgColor="bg-green-50" Label="Website" @bind-Value="@allianceCollection!.Website">
+                                                    <ErrorValidationRF>
+                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => allianceCollection.Website" /></p>
+                                                    </ErrorValidationRF>
+                                                </MyInputText>
+                                            </div>
+                                            <div class="sm:col-span-3">
                                             </div>
 
 
                                             <div class="sm:col-span-2">
                                                 <MyInputToggle BgColor="bg-green-50" Label="Is Active">
                                                     <Toggle>
-                                                        <span @onclick="@OnIsActiveClicked" class="@(gallery.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
-                                                            <span class="@(gallery.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
+                                                        <span @onclick="@OnIsActiveClicked" class="@(allianceCollection.IsActive ? "bg-indigo-500" : "bg-gray-200") mt-0.5 relative inline-block flex items-center h-5 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:shadow-outline" role="checkbox" tabindex="0">
+                                                            <span class="@(allianceCollection.IsActive ? "translate-x-5" : "translate-x-0") inline-block h-4 w-5 rounded-full bg-white shadow transform transition ease-in-out duration-200"></span>
                                                         </span>
                                                     </Toggle>
                                                 </MyInputToggle>
@@ -64,10 +85,10 @@
 
 
                                             <div class="sm:col-span-6">
-                                                <label for="about" class="block text-sm font-medium text-gray-700">About</label>
+                                                <label for="about" class="block text-sm font-medium text-gray-700">Description</label>
                                                 <div class="mt-1">
                                                     <Editor ApiKey="no-api-key"
-                                                    Field="() => gallery.Desc" @bind-Value="gallery.Desc"
+                                                            Field="() => allianceCollection.Desc" @bind-Value="allianceCollection.Desc"
                                                     JsConfSrc="TinyBlzRoxy"
                                                     ScriptSrc="lib/tinymce/js/tinymce.min.js"></Editor>
                                                     <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
@@ -91,24 +112,18 @@
                                     <div>
                                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
 
+
+
                                             <div class="sm:col-span-2">
-                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Browse Album Thumbnail</label>
+                                                <label for="mobile" class="block text-sm font-medium text-gray-700">Browse Logo</label>
                                                 <div class="mt-1 flex items-center cursor-pointer">
-                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@gallery!.ImageUrl" id="customImage" />
+                                                    <img @onclick="@(() => ShowRoxyModal("customInput", "customImage"))" src="@allianceCollection!.Logo" id="customImage" />
                                                 </div>
                                             </div>
                                             <div class="sm:col-span-4"></div>
 
-                                            <div class="sm:col-span-2">
-                                                <MyInputText BgColor="bg-indigo-50" Label="Album Path" @bind-Value="@gallery!.PathUrl">
-                                                    <ErrorValidationRF>
-                                                        <p class="mt-1 text-xs text-red-600"><ValidationMessage For="() => gallery.PathUrl" /></p>
-                                                    </ErrorValidationRF>
-                                                </MyInputText>
-                                            </div>
 
                                         </div>
-
                                     </div>
                             </div>
                         break;
@@ -154,9 +169,12 @@
 @code
 {
     [Parameter]
+    public int AllianceId { get; set; }
+    [Parameter]
     public int Id { get; set; }
 
-    GalleryModel? gallery = new();
+    //AllianceModel alliance = new();
+    AllianceCollectionModel? allianceCollection = new();
     public EditContext? EditContext;
     CrudOperation crudOperation = CrudOperation.Add;
 
@@ -165,6 +183,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+
+
         TabItems = TabItem.TabItems();
         //TabItems = TabItems!.ToList();
         TabItemSelected = TabItems.FirstOrDefault()!;
@@ -172,17 +192,18 @@
         if(Id > 0)
         {
             // Warning: do not use FindAsync here.
-            gallery = _db.GalleryModels.Find(Id);
+            allianceCollection = _db.AllianceCollectionModels.Find(Id);
             crudOperation = CrudOperation.Edit;
         }
         else
-        {
-            gallery!.Name = "Ank";
-            gallery!.Desc = "Yjn";
-            gallery.ImageUrl = "/myassets/resources/no-image.jpg";
+        {            
+            allianceCollection!.Name = "Title";
+            allianceCollection!.Email = "Subtitle";
+            allianceCollection.Logo = "/myassets/resources/no-image.jpg";
+            allianceCollection.AllianceModelId = AllianceId;
         }
 
-        EditContext = new(gallery!);
+        EditContext = new(allianceCollection!);
 
         //EditContext.NotifyValidationStateChanged();
         //EditContext.OnFieldChanged += EditContext_OnFieldChanged!;
@@ -200,6 +221,12 @@
         //StateHasChanged();
     }
 
+    async Task<AllianceModel> GetAllianceAsync()
+    {
+        var alliances = await _db.AllianceModels.ToListAsync();
+        return alliances.Where(x => x.Id == AllianceId).FirstOrDefault()!;
+    }
+
     void TabItemCallback(TabItem selectedTabItem)
     {
         TabItemSelected = selectedTabItem;
@@ -208,34 +235,34 @@
 
     private void OnIsActiveClicked()
     {
-        gallery!.IsActive = !gallery.IsActive;
+        allianceCollection!.IsActive = !allianceCollection.IsActive;
     }
 
     async void OnSubmitForm()
     {
         if (!EditContext!.GetValidationMessages().Any())
         {
-            await SaveAsync(gallery!);
+            await SaveAsync(allianceCollection!);
             GoBack();
         }
     }
-    async Task SaveAsync(GalleryModel mdl)
+    async Task SaveAsync(AllianceCollectionModel mdl)
     {
 
         switch (crudOperation)
         {
             case CrudOperation.Add:
-                await _db.GalleryModels.AddAsync(mdl);
+                await _db.AllianceCollectionModels.AddAsync(mdl);
                 break;
             case CrudOperation.Edit:
                 //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
                 //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
                 _db.Entry(mdl).State = EntityState.Modified;
 
-                _db.GalleryModels.Update(mdl);
+                _db.AllianceCollectionModels.Update(mdl);
                 break;
             case CrudOperation.Delete:
-                _db.GalleryModels.Remove(mdl);
+                _db.AllianceCollectionModels.Remove(mdl);
                 break;
             default:
                 break;
@@ -243,7 +270,7 @@
         await _db.SaveChangesAsync();
         //// cannot be tracked because another instance with the same key value for { 'Id'} is already being tracked.
         //// When attaching existing entities, ensure that only one entity instance with a given key value is attached
-        _db.Entry<GalleryModel>(mdl).State = EntityState.Detached;
+        _db.Entry<AllianceCollectionModel>(mdl).State = EntityState.Detached;
     }
 
 
@@ -282,12 +309,9 @@
         switch (ElemImgId)
         {
             case "customImage":
-                gallery!.ImageUrl = returnImage;
+                allianceCollection!.Logo = returnImage;
                 break;
         }
-
-        int lastSlash = returnImage.LastIndexOf('/');
-        gallery!.PathUrl = (lastSlash > -1) ? returnImage.Substring(0, lastSlash) : returnImage;
 
         StateHasChanged();
     }
@@ -298,7 +322,7 @@
         showRoxy = true;
     }
 
-    void GoBack() => _navManager.NavigateTo("/gallery");
+    void GoBack() => _navManager.NavigateTo("/alliance-collection/" + AllianceId);
 
 }
 

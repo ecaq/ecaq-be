@@ -71,41 +71,6 @@ public class CityController : ControllerBase
         }
     }
 
-
-    [Authorize]
-    [HttpPost("Add-City")]
-    public async Task<ActionResult<Cities>> AddCity(Cities city)
-    {
-        string contentRootPath = _hostingEnv.ContentRootPath;
-        string webRootPath = _hostingEnv.WebRootPath;
-
-        //var contentRoot = Directory.GetCurrentDirectory();
-        var folderPath = Path.Combine(webRootPath, "data\\");
-
-        string fullPath = folderPath + "cities.json";
-
-        Ecaq.Helpers.Utility.AddObjectToJsonFile(fullPath, city, _jsonOptions);
-
-
-        //var url = $"https://www.google.com/recaptcha/api/siteverify?secret={SECRET_KEY}&response={token}";
-        //RestClient omasterRestClient = new();
-        //var oMaster = await omasterRestClient.GRecaptchaAsync(url);
-
-        //if (!oMaster.success)
-        //{
-        //    return BadRequest();
-        //}
-
-        //if (string.IsNullOrEmpty(fm.FormSubject))
-        //{
-        //    fm.FormSubject = "Iquiry from Contact Forms of AAMotors Website";
-        //}
-        //var result = await ComposeMessage(fm);
-
-        return await Task.FromResult(Ok(city));
-    }
-
-
     [AllowAnonymous]
     //[Authorize]
     [HttpGet("Get-Cities")]
@@ -178,37 +143,5 @@ public class CityController : ControllerBase
         }
     }
 
-
-
-    [Authorize]
-    [HttpDelete("Delete-City/{id}")]
-    public ActionResult DeleteCity(int id)
-    {
-        // IF YOUR PUT/DELETE ENDPOINTS HAS CORS ERROR OR 405 Method Not Allowed TRY THE BELOW WORKAROUND
-        // // <system.webServer>
-        // // <modules runAllManagedModulesForAllRequests="false">
-        // //   <remove name="WebDAVModule" />
-        // // </modules>
-        // // </system.webServer>
-
-        string contentRootPath = _hostingEnv.ContentRootPath;
-        string webRootPath = _hostingEnv.WebRootPath;
-
-        //var contentRoot = Directory.GetCurrentDirectory();
-        var folderPath = Path.Combine(webRootPath, "data\\");
-
-        string fullPath = folderPath + "cities.json";
-
-        try
-        {
-            Ecaq.Helpers.Utility.DeletedToJsonFile(fullPath, id, _jsonOptions);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return Ok(e.Message);
-        }
-
-    }
 
 }

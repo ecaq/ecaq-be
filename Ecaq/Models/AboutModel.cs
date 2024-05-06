@@ -11,6 +11,8 @@ public class AboutModel : BaseEntity
 
     [DataType(DataType.MultilineText)]
     public string Desc { get; set; } = string.Empty;
+    [DataType(DataType.MultilineText)]
+    public string Desc2 { get; set; } = string.Empty;
 
 
     public string StatNationalityText { get; set; } = string.Empty;

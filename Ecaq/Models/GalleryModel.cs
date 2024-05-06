@@ -8,7 +8,6 @@ namespace Ecaq.Models
 
         [DataType(DataType.MultilineText)]
         public string Desc { get; set; } = string.Empty;
-        public string ThumbUrl { get; set; } = string.Empty; // to do - to remove
         public string ImageUrl { get; set; } = string.Empty;
         public string PathUrl { get; set; } = string.Empty;
     }

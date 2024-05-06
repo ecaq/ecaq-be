@@ -11,8 +11,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FluentUI.AspNetCore.Components;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -120,9 +123,14 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseSession(); // also use for RoxyFileman to be able to create folder
-app.UseAntiforgery();
+app.UseRouting();
 
 app.UseCors("MyAllowSpecificOrigins");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
@@ -139,6 +147,7 @@ app.MapHomeBannerEndpoint();
 app.MapAboutEndpoint();
 app.MapEcaqCoreEndpoint();
 app.MapGalleryEndpoint(app.Environment, mapper);
+app.MapAllianceEndpoint();
 app.MapMemberModelEndpoints();
 app.MapBookModelEndpoints();
 

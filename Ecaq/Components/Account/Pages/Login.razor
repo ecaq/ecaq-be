@@ -72,7 +72,7 @@
         </EditForm>
 
         <p class="mt-10 text-center text-sm text-gray-500 text-danger">
-            @errorMessage
+            <StatusMessage Message="@errorMessage" />
         </p>
 
     </div>
@@ -95,14 +95,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(HttpContext is not null)
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
-
-            if (HttpMethods.IsGet(HttpContext.Request.Method))
-            {
-                // Clear the existing external cookie to ensure a clean login process
-                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-            }  
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
     }
 
@@ -114,14 +110,7 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            if (!string.IsNullOrEmpty(ReturnUrl))
-            {                
-                RedirectManager.RedirectTo(ReturnUrl);
-            }
-            else
-            {
-                RedirectManager.RedirectTo("/");
-            }
+            RedirectManager.RedirectTo(ReturnUrl);
         }
         else if (result.RequiresTwoFactor)
         {
