@@ -8,13 +8,13 @@ public static class MemberModelEndpoints
 {
     public static void MapMemberModelEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/MemberModel").WithTags(nameof(MemberModel));
+        var group = routes.MapGroup("/api/Members").WithTags(nameof(MemberModel));
 
         group.MapGet("/", async (AppDbContext db) =>
         {
             return await db.MemberModels.ToListAsync();
         })
-        .WithName("GetAllMemberModels")
+        .WithName("GetAllMembers")
         .WithOpenApi();
 
         group.MapGet("/{id}", async Task<Results<Ok<MemberModel>, NotFound>> (int id, AppDbContext db) =>
@@ -25,7 +25,7 @@ public static class MemberModelEndpoints
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
         })
-        .WithName("GetMemberModelById")
+        .WithName("GetMemberById")
         .WithOpenApi();
 
         //group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, MemberModel memberModel, AppDbContext db) =>

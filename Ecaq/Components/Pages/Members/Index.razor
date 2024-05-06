@@ -40,7 +40,7 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach (var item in members)
+                                @foreach (var item in members.OrderBy(x => x.MemberName))
                                 {
                                     <tr>
                                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
