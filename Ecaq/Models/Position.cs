@@ -1,4 +1,6 @@
-﻿namespace Ecaq.Models;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Ecaq.Models;
 
 public class Position
 {

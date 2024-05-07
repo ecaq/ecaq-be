@@ -21,6 +21,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<MemberModel> MemberModels => Set<MemberModel>();
     public DbSet<AllianceModel> AllianceModels => Set<AllianceModel>();
     public DbSet<AllianceCollectionModel> AllianceCollectionModels => Set<AllianceCollectionModel>();
+    public DbSet<NewsModel> NewsModels => Set<NewsModel>();
 
 
     /// <summary>

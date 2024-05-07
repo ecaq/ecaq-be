@@ -54,6 +54,7 @@ builder.Services.AddScoped<IHomeBannerRepository, HomeBannerRepository>();
 builder.Services.AddScoped<IAboutRepository, AboutRepository>();
 builder.Services.AddScoped<IEcaqCoreModelRepository, EcaqCoreModelRepository>();
 builder.Services.AddScoped<IMemberModelRepository, MemberModelRepository>();
+builder.Services.AddScoped<INewsModelRepository, NewsModelRepository>();
 
 builder.Services.AddControllers();
 
@@ -149,6 +150,7 @@ app.MapEcaqCoreEndpoint();
 app.MapGalleryEndpoint(app.Environment, mapper);
 app.MapAllianceEndpoint();
 app.MapMemberModelEndpoints();
+app.MapNewsModelEndpoints();
 app.MapBookModelEndpoints();
 
 using var scope = app.Services.CreateScope();

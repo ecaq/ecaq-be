@@ -1,4 +1,6 @@
-﻿namespace Ecaq.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Ecaq.Models;
 
 public class MemberModel : BaseEntity
 {
@@ -8,7 +10,8 @@ public class MemberModel : BaseEntity
     public string LogoUrl { get; set; } = string.Empty;
     public DateTime JoinDate { get; set; } = new DateTime();
     public string Notes { get; set; } = string.Empty;
-    //public Position position { get; set; }
+    [NotMapped]
+    public Position Position { get; set; } = new();
     public double lat { get; set; } = 0;
     public double lng { get; set; } = 0;
 }
